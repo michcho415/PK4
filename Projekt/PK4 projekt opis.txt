@@ -1,0 +1,18 @@
+Tematem projektu będzie gra w dwóch wymiarach typu shooter. Gracz będzie poruszał się małym pojazdem i jego
+celem będzie obrona swojego budynku. W tym celu będzie musiał, pokonywać i niszczyć rożne przeszkody,
+pozbyć się wrogów z planszy, których celem będzie budynek gracza oraz unikać pocisków wroga. Podczas
+rozgrywki gracz będzie mógł również zbierać bonusy, które ułatwią mu zadanie np. zwiększające siłę pocisku,
+zwiększające ilość życia gracza. Całość gry będzie widziana z góry, ale niektóre pola będą przysłaniać planszę
+gry, co utrudni rozgrywkę.
+
+Interfejs użytkownika:
+Przed rozgrywką użytkownik będzie mógł wybrać poziom truności:
+łatwy - gracz będzie miał dużą ilość życia i kule będą poruszały się wolno
+średni - gracz będzie miał mniejszą ilość życia i kule będą poruszały się szybciej
+trudny - gracz bęzie miał mało życia i jego kule będą się poruszać wolno a przeciwnika szybko.
+Oprócz tego gracz będzie miał możliwość wyboru klawiszy na klawiaturze, którymi będzie sterować swoim pojazem.
+
+W tracie rozgrywki oprócz samej akcji będą znajdywać się informacje o ilości życia gracza oraz aktualnym
+wyniku.
+
+Do wykonania projektu chciałbym użyć bibliotei SFML.
