@@ -5,18 +5,22 @@
 #include "SFML/Window.hpp"
 #include "Menu.h"
 
+enum Difficulty{EASY, MEDIUM, HARD};
+
 
 
 class Game
 {
 private:
-	
-	State game_state;
+
+	std::map<std::string, sf::Keyboard::Key> Keys;
+	Game_State game_state;
+	Difficulty game_difficulty;
 
 
 	/////////
-	Menu menu;
-	sf::RenderWindow main_window;
+	Menu* menu;
+	sf::RenderWindow* window;
 
 	
 	
@@ -25,7 +29,10 @@ private:
 public:
 
 	Game();
-	static Game & Get() { static Game Game; return Game; }
+	void Run();
+	void set_game_state(Game_State state) { game_state = state; }
+	Game & Get() { return *this; }
+	friend int set_Keys(std::map<std::string, sf::Keyboard::Key> & keys, sf::Event & event, const char* name);
 
 };
 
