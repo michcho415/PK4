@@ -1,10 +1,17 @@
 #include "Game.h"
+#include "Level.h"
 
-Game::Game():game_state(MAIN_MENU)
+Game::Game():game_state(MAIN_MENU), game_difficulty(EASY)
 {
-	window = new sf::RenderWindow(sf::VideoMode(400, 300), "Game");
-	menu = new Menu(window->getSize().x, window->getSize().y);
+	
 
+	window = new sf::RenderWindow(sf::VideoMode(640, 480), "Game");
+	menu = new Menu(window);
+	stage = new Level(window);
+
+
+	InitDefaultKeys();
+	stage->LoadLevelfromFile("Stage1.txt");
 
 }
 
@@ -22,30 +29,36 @@ void Game::Run()
 			}
 			if (game_state == MAIN_MENU)
 			{
-				menu->CheckEvents(event, window, game_state, Keys);
+				menu->CheckEvents(event, window, keys);
 			}
 			
 		}
 
-		window->clear(sf::Color::Black);
+		
 		if (game_state == MAIN_MENU)
 		{
-			menu->Draw(*window, window->getSize().x, window->getSize().y);
+			window->clear(sf::Color::Black);
+			menu->Draw(window);
+		}
+		else if (game_state == PLAYING)
+		{
+			window->clear(sf::Color(145,145,145));
+			stage->Draw(window);
 		}
 		
 		window->display();
 	}
 }
 
-int set_Keys(std::map<std::string, sf::Keyboard::Key> & keys, sf::Event & event, const char* name)
-{	
-
-	if (event.type == sf::Event::MouseButtonPressed)
-	{
-		//keys[name] = event.key.code;
-		return event.key.code;
-		
-	}
-
+void Game::InitDefaultKeys()
+{
+	keys[UP] = sf::Keyboard::Up;
+	keys[DOWN] = sf::Keyboard::Down;
+	keys[LEFT] = sf::Keyboard::Left;
+	keys[RIGHT] = sf::Keyboard::Right;
+	keys[SHOOT] = sf::Keyboard::Space;
+	keys[ESCAPE] = sf::Keyboard::Escape;
+	keys[ENTER] = sf::Keyboard::Enter;
 }
+
 

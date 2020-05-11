@@ -1,10 +1,15 @@
 #include "Menu.h"
 #include "Game.h"
+#include "Sprites.h"
 #include <iostream>
+
+
 
 void Menu::Init()
 {
-	if (!tex.loadFromFile("Resources/Player1.bmp", sf::IntRect(30, 30, 30, 30)))
+	select_sprite = Sprites::Get().get_sprite("Tanks", sf::IntRect(0, 30, 30, 30));
+	Title = Sprites::Get().get_sprite("Title", sf::IntRect(0, 0, 357, 151));
+	if (!tex.loadFromFile("Resources/Player1.bmp", sf::IntRect(0, 30, 30, 30)))
 	{
 		throw "Nie uda³o siê odczytaæ pliku Player1.bmp!";
 	}
@@ -12,76 +17,72 @@ void Menu::Init()
 	{
 		throw "Nie uda³o siê odczytaæ pliku NesFont.ttf!";
 	}
+	if (!title.loadFromFile("Resources/Title.png"))
+	{
+		throw "Nie uda³o siê odczytaæ pliku Title.png!";
+	}
 }
 
-
-
-Menu::Menu(float height, float width):selectedItem(0), option(MAIN)
+Menu::Menu(sf::RenderWindow *& window):selectedItem(0), option(MAIN)
 {
+
 	Init();
-	
-	select_sprite.setTexture(tex);
-	select_sprite.setOrigin(select_sprite.getLocalBounds().width/ 2.0f, select_sprite.getLocalBounds().height/2.0f);
-	select_sprite.getOrigin().x;
+	Title.setTexture(title);
+	CenterOrigin(Title);
+	CenterPosition_X(Title, window, 150);
+
+	//select_sprite.setTexture(tex);
+	CenterOrigin(select_sprite);
+
 
 
 
 	//MAIN MENU
 	menu[0].setString("PLAY");
-	menu[0].setPosition(width / 2.0f, height / 2.0f);
-		
 	menu[1].setString("OPTIONS");
-	menu[1].setPosition(width / 2.0f, height / 2.0f + 30);
-
 	menu[2].setString("EXIT");
-	menu[2].setPosition(width / 2.0f, height / 2.0f + 60);
-
-	//OPTIONS
+		
 	menu[3].setString("DIFFICULTY: ");
-	menu[3].setPosition(width / 2.0f - 70, height / 2.0f - 120);
-
 	menu[4].setString("MOVE UP: ");
-	menu[4].setPosition(width / 2.0f - 70, height / 2.0f - 90);
-	
 	menu[5].setString("MOVE DOWN: ");
-	menu[5].setPosition(width / 2.0f - 70, height / 2.0f - 60);
-
 	menu[6].setString("MOVE LEFT: ");
-	menu[6].setPosition(width / 2.0f - 70, height / 2.0f - 30);
-
 	menu[7].setString("MOVE RIGHT: ");
-	menu[7].setPosition(width / 2.0f - 70, height / 2.0f);
-
 	menu[8].setString("SHOOT: ");
-	menu[8].setPosition(width / 2.0f - 70, height / 2.0f + 30);
 
-	//default Keys
-	KeysText[0].setString("UP");
-	KeysText[0].setPosition(width / 2.0f + 100, height / 2.0f - 90);
+	////default Keys
+	KeysText[0].setString("EASY");
+	KeysText[1].setString("UP");
+	KeysText[2].setString("DOWN");
+	KeysText[3].setString("LEFT");
+	KeysText[4].setString("RIGHT");
+	KeysText[5].setString("SPACE");
+	press_key.setString("PRESS KEY!");
+	press_key.setFont(font);
+	press_key.setCharacterSize(15);
+	CenterOrigin(press_key);
+	SetPositionfromCenter(press_key, window, 0, 120);
+	press_key.setFont(font);
+	press_key.setCharacterSize(15);
 
-	KeysText[1].setString("DOWN");
-	KeysText[1].setPosition(width / 2.0f + 100, height / 2.0f - 60);
-
-	KeysText[2].setString("LEFT");
-	KeysText[2].setPosition(width / 2.0f + 100, height / 2.0f - 30);
-
-	KeysText[3].setString("RIGHT");
-	KeysText[3].setPosition(width / 2.0f + 100, height / 2.0f);
-
-	KeysText[4].setString("SPACE");
-	KeysText[4].setPosition(width / 2.0f + 100, height / 2.0f + 30);
-
-	
-
-	for (int i = 8; i >= 0; --i)
+	//mainmenu
+	for (int i = 0; i <= 8; ++i)
 	{
+		
 		menu[i].setFont(font);
 		menu[i].setCharacterSize(15);
-		menu[i].setOrigin(menu[i].getLocalBounds().left / 2.0f, menu[i].getLocalBounds().height / 2.0f);
 		KeysText[i].setFont(font);
 		KeysText[i].setCharacterSize(15);
-		KeysText[i].setOrigin(KeysText[i].getLocalBounds().left / 2.0f, KeysText[i].getLocalBounds().height / 2.0f);
+		CenterOrigin(menu[i]);
+		CenterOrigin(KeysText[i]);
+		CenterPosition_X(menu[i], window, window->getSize().x / 2.0 + 30*i);
 	}
+	//options
+	for (int i = 3; i <= 8; ++i)
+	{
+		SetPositionfromCenter(menu[i], window, -45, -160 + 30 * i);
+		SetPositionfromCenter(KeysText[i-3], window, 80, -160 + 30 * i);
+	}
+	
 
 }
 
@@ -121,148 +122,169 @@ void Menu::MoveDown()
 	}
 }
 
-void Menu::CheckEvents(sf::Event ev, sf::RenderWindow *& window, Game_State & state, std::map<std::string, sf::Keyboard::Key> & keys)
+void Menu::CheckEvents(sf::Event ev, sf::RenderWindow *& window, std::map<Keys, sf::Keyboard::Key> & keys)
 {
+	
 	if (ev.type == sf::Event::KeyPressed)
 	{
 		if (option == MAIN)
 		{
-			switch (ev.key.code)
+			if (ev.key.code == keys[UP])
 			{
-			case sf::Keyboard::Up:
 				MoveUp();
-				break;
-			case sf::Keyboard::Down:
+			}
+			else if (ev.key.code == keys[DOWN])
+			{
 				MoveDown();
+			}
+			else if (ev.key.code == keys[ENTER])
+			{
+			switch (selectedItem)
+			{
+			case 0:
+				Game::Get().set_game_state(PLAYING);
 				break;
-			case sf::Keyboard::Enter:
-				switch (selectedItem)
-				{
-				case 0:
-					state = PLAYING;
-					break;
-				case 1:
-					option = OPTIONS;
-					selectedItem = 0;
-					break;
-				case 2:
-					window->close();
-					break;
-				}
-
+			case 1:
+				option = OPTIONS;
+				selectedItem = 0;
+				break;
+			case 2:
+				window->close();
+				break;
+			}
 			}
 		}
 		else if (option == OPTIONS)
 		{
-			switch (ev.key.code)
+			if (ev.key.code == keys[ESCAPE])
 			{
-			    case sf::Keyboard::Escape:
-					selectedItem = 0;
-					option = MAIN;
-					break;
-				case sf::Keyboard::Down:
-					MoveDown();
-					break;
-				case sf::Keyboard::Up:
-					MoveUp();
-					break;
-				case sf::Keyboard::Enter:
-					BindKeys(keys, *window);
-
-						for (int i = 5; i >= 0; --i)
-						{
-							//KeysText[i].setOrigin(KeysText[i].getLocalBounds().left / 2.0f, KeysText[i].getLocalBounds().height / 2.0f);
-							//KeysText[i].setPosition(menu[i+3].getLocalBounds().width + KeysText[i].getLocalBounds().width, menu[i+3].getLocalBounds().height);
-						}
-					break;
-					
+				selectedItem = 0;
+				option = MAIN;
+			}
+			else if (ev.key.code == keys[UP])
+			{
+				MoveUp();
+			}
+			else if (ev.key.code == keys[DOWN])
+			{
+				MoveDown();
+			}
+			else if (ev.key.code == keys[ENTER])
+			{
+				BindKeysandChangeDifficulty(keys, window);
 			}
 		}
 	}
 	
 }
 
-void Menu::BindKeys(std::map<std::string, sf::Keyboard::Key>& keys, sf::RenderWindow & window)
+void Menu::BindKeysandChangeDifficulty(std::map<Keys, sf::Keyboard::Key>& keys, sf::RenderWindow *& window)
 {
-	sf::Event bind;
-	std::cout << sf::Keyboard::A << "\n";
 	int x;
 	std::string w;
+
+
 	switch (selectedItem)
 	{
 	case 0:
-
+		if (Game::Get().get_difficulty() == EASY)
+		{
+			Game::Get().set_difficulty(MEDIUM);
+			KeysText[0].setString("MEDIUM");
+		}
+		else if (Game::Get().get_difficulty() == MEDIUM)
+		{
+			Game::Get().set_difficulty(HARD);
+			KeysText[0].setString("HARD");
+		}
+		else {
+			Game::Get().set_difficulty(EASY);
+			KeysText[0].setString("EASY");
+		}
+		
 		break;
 	case 1:
-		x = set_Key(keys, window, "MOVEUP");
-		w = exchange_key_code_to_string(x);
-		KeysText[0].setString(w);
-		std::cout << x << " " << exchange_key_code_to_string(x);
-		break;
-	case 2:
-		x = set_Key(keys, window, "MOVEDOWN");
+		
+		x = set_Key(keys, window, UP);
 		w = exchange_key_code_to_string(x);
 		KeysText[1].setString(w);
 		break;
-
-	case 3:
-		x = set_Key(keys, window, "MOVELEFT");
+	case 2:
+		x = set_Key(keys, window, DOWN);
 		w = exchange_key_code_to_string(x);
 		KeysText[2].setString(w);
 		break;
 
-	case 4:
-		x = set_Key(keys, window, "MOVERIGHT");
+	case 3:
+		x = set_Key(keys, window, LEFT);
 		w = exchange_key_code_to_string(x);
 		KeysText[3].setString(w);
 		break;
 
-	case 5:
-		x = set_Key(keys, window, "SHOOT");
+	case 4:
+		x = set_Key(keys, window, RIGHT);
 		w = exchange_key_code_to_string(x);
 		KeysText[4].setString(w);
+		break;
+
+	case 5:
+		x = set_Key(keys, window, SHOOT);
+		w = exchange_key_code_to_string(x);
+		KeysText[5].setString(w);
 		break;
 	}
 }
 
-int Menu::set_Key(std::map<std::string, sf::Keyboard::Key>& keys, sf::RenderWindow & window, const char * name)
+int Menu::set_Key(std::map<Keys, sf::Keyboard::Key>& keys, sf::RenderWindow *& window, enum Keys id)
 {
 	sf::Event event;
-	while (window.waitEvent(event))
-	{
-		if (event.type == sf::Event::KeyPressed)
+
+		window->draw(press_key);
+		window->display();
+		while (window->waitEvent(event))
 		{
 
-			keys[name] = event.key.code;
-			return event.key.code;
+			if (event.type == sf::Event::KeyPressed)
+			{
+
+				if (event.key.code == sf::Keyboard::Enter || event.key.code == sf::Keyboard::Escape)
+				{
+					return sf::Keyboard::Unknown;
+				}
+				keys[id] = event.key.code;
+				return event.key.code;
+
+			}
 
 		}
-	}
+	
+	return -1;
 
 
 }
 
-void Menu::Draw(sf::RenderWindow & window, float height, float width)
+void Menu::Draw(sf::RenderWindow *& window)
 {
 	if (option == MAIN)
 	{
+		window->draw(Title);
 		for (int i = 2; i >= 0; --i)
 		{
-			window.draw(menu[i]);
+			window->draw(menu[i]);
 		}
 		switch (selectedItem)
 		{
 		case 0:
-			select_sprite.setPosition(menu[0].getPosition().x - 25, menu[0].getPosition().y);
-			window.draw(select_sprite);
+			select_sprite.setPosition(menu[0].getPosition().x - 80, menu[0].getPosition().y);
+			window->draw(select_sprite);
 			break;
 		case 1:
-			select_sprite.setPosition(menu[1].getPosition().x - 25, menu[1].getPosition().y);
-			window.draw(select_sprite);
+			select_sprite.setPosition(menu[1].getPosition().x - 80, menu[1].getPosition().y);
+			window->draw(select_sprite);
 			break;
 		case 2:
-			select_sprite.setPosition(menu[2].getPosition().x - 25, menu[2].getPosition().y);
-			window.draw(select_sprite);
+			select_sprite.setPosition(menu[2].getPosition().x - 80, menu[2].getPosition().y);
+			window->draw(select_sprite);
 			break;
 		}
 	}
@@ -270,37 +292,37 @@ void Menu::Draw(sf::RenderWindow & window, float height, float width)
 	{
 		for (int i = 8; i >= 3; --i)
 		{
-			window.draw(menu[i]);
-			window.draw(KeysText[i-3]); // [5, 0]
+			window->draw(menu[i]);
+			window->draw(KeysText[i-3]); // [5, 0]
 		}
 		
 		
 		switch (selectedItem)
 		{
 		case 0:
-			select_sprite.setPosition(menu[3].getPosition().x - 25, menu[3].getPosition().y);
-			window.draw(select_sprite);
+			select_sprite.setPosition(menu[3].getPosition().x - 120, menu[3].getPosition().y);
+			window->draw(select_sprite);
 			break;
 		case 1:
-			select_sprite.setPosition(menu[4].getPosition().x - 25, menu[4].getPosition().y); //Move UP
+			select_sprite.setPosition(menu[4].getPosition().x - 120, menu[4].getPosition().y); //Move UP
 			
-			window.draw(select_sprite);
+			window->draw(select_sprite);
 			break;
 		case 2:
-			select_sprite.setPosition(menu[5].getPosition().x - 25, menu[5].getPosition().y);
-			window.draw(select_sprite);
+			select_sprite.setPosition(menu[5].getPosition().x - 120, menu[5].getPosition().y);
+			window->draw(select_sprite);
 			break;
 		case 3:
-			select_sprite.setPosition(menu[6].getPosition().x - 25, menu[6].getPosition().y);
-			window.draw(select_sprite);
+			select_sprite.setPosition(menu[6].getPosition().x - 120, menu[6].getPosition().y);
+			window->draw(select_sprite);
 			break;
 		case 4:
-			select_sprite.setPosition(menu[7].getPosition().x - 25, menu[7].getPosition().y);
-			window.draw(select_sprite);
+			select_sprite.setPosition(menu[7].getPosition().x - 120, menu[7].getPosition().y);
+			window->draw(select_sprite);
 			break;
 		case 5:
-			select_sprite.setPosition(menu[8].getPosition().x - 25, menu[8].getPosition().y);
-			window.draw(select_sprite);
+			select_sprite.setPosition(menu[8].getPosition().x - 120, menu[8].getPosition().y);
+			window->draw(select_sprite);
 			break;
 
 		}
@@ -405,8 +427,32 @@ std::string Menu::exchange_key_code_to_string(int KeyCode)
 	case sf::Keyboard::Comma:
 		key_name = ",";
 		break;
+	case sf::Keyboard::Space:
+		key_name = "SPACE";
+		break;
+	default:
+		key_name = "UNKNOWN!";
+		break;
+
 	}
 	return key_name;
 }
 
+std::string Menu::Difficulty_to_string(Difficulty diff)
+{
+	std::string word;
+	switch (diff)
+	{
+	case EASY:
+		word = "EASY";
+		break;
+	case MEDIUM:
+		word = "MEDIUM";
+		break;
+	case HARD:
+		word = "HARD";
+		break;
+	}
+	return word;
 
+}

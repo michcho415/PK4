@@ -115,17 +115,26 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Block.cpp" />
+    <ClCompile Include="Level.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="Object.cpp" />
+    <ClCompile Include="Sprites.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Block.h" />
+    <ClInclude Include="Level.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Menu.h" />
+    <ClInclude Include="Object.h" />
+    <ClInclude Include="OriginandPositionTemplate.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Sprites.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Tanks.rc" />
@@ -134,7 +143,10 @@
     <Font Include="Resources\NesFont.ttf" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Resources\block.png" />
     <Image Include="Resources\Player1.bmp" />
+    <Image Include="Resources\tank.png" />
+    <Image Include="Resources\Title.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

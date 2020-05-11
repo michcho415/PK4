@@ -9,8 +9,8 @@ int main()
 {
 	
 	try {
-		static Game Game;
-		Game.Run();
+		
+		Game::Get().Run();
 	}
 	catch (...)
 	{
