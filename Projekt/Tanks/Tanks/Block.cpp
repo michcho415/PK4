@@ -1,11 +1,16 @@
 #include "Block.h"
 #include "Sprites.h"
+#include "OriginandPositionTemplate.h"
 
-Block::Block(): Object()
+Block::Block(): Object(), bl_type(NONE)
 {
 }
 
-Block::Block(float x, float y): Object(x, y, 0), type(type)
+Block::Block(float x, float y) : Object(x, y, 0, UP_)
+{
+}
+
+void Block::set_Tile()
 {
 }
 
@@ -16,6 +21,7 @@ void Block::Draw(sf::RenderWindow *& window)
 
 void Block::setSprite(Block_type type)
 {
+	bl_type = type;
 	switch (type)
 	{
 	case BRICK:
@@ -29,9 +35,15 @@ void Block::setSprite(Block_type type)
 		break;
 
 	}
+	CenterOrigin(sprite);
 	sprite.setPosition(x, y);
 }
 
-void Block::Update()
+void Block::Update(sf::Event & ev, float dt)
+{
+
+}
+
+void Block::shape_Sprite(sf::IntRect & x)
 {
 }

@@ -7,15 +7,13 @@ enum Difficulty { EASY, MEDIUM, HARD };
 
 enum Keys { UP, DOWN, LEFT, RIGHT, SHOOT, ENTER, ESCAPE };
 
-enum Game_State { PLAYING, MAIN_MENU, EXIT };
+enum Game_State { PLAYING, MAIN_MENU, OPTIONS, EXIT };
 
-enum Menu_state{MAIN, OPTIONS};
 
 class Menu
 {
 private:
 	
-	Menu_state option;
 	int selectedItem;
 	sf::Font font;
 	sf::Text menu[10];

@@ -9,6 +9,8 @@ void Menu::Init()
 {
 	select_sprite = Sprites::Get().get_sprite("Tanks", sf::IntRect(0, 30, 30, 30));
 	Title = Sprites::Get().get_sprite("Title", sf::IntRect(0, 0, 357, 151));
+
+	//TO DO: wywaliæ to poni¿ej
 	if (!tex.loadFromFile("Resources/Player1.bmp", sf::IntRect(0, 30, 30, 30)))
 	{
 		throw "Nie uda³o siê odczytaæ pliku Player1.bmp!";
@@ -23,7 +25,7 @@ void Menu::Init()
 	}
 }
 
-Menu::Menu(sf::RenderWindow *& window):selectedItem(0), option(MAIN)
+Menu::Menu(sf::RenderWindow *& window):selectedItem(0)
 {
 
 	Init();
@@ -74,13 +76,13 @@ Menu::Menu(sf::RenderWindow *& window):selectedItem(0), option(MAIN)
 		KeysText[i].setCharacterSize(15);
 		CenterOrigin(menu[i]);
 		CenterOrigin(KeysText[i]);
-		CenterPosition_X(menu[i], window, window->getSize().x / 2.0 + 30*i);
+		CenterPosition_X(menu[i], window, window->getSize().x / 2.0f + 30*i);
 	}
 	//options
 	for (int i = 3; i <= 8; ++i)
 	{
-		SetPositionfromCenter(menu[i], window, -45, -160 + 30 * i);
-		SetPositionfromCenter(KeysText[i-3], window, 80, -160 + 30 * i);
+		SetPositionfromCenter(menu[i], window, -45.0f, -160.0f + 30.0f * i);
+		SetPositionfromCenter(KeysText[i-3], window, 80.0f, -160.0f + 30.0f * i);
 	}
 	
 
@@ -89,7 +91,7 @@ Menu::Menu(sf::RenderWindow *& window):selectedItem(0), option(MAIN)
 void Menu::MoveUp()
 {
 	--selectedItem;
-	if (option == MAIN)
+	if (Game::Get().get_game_state() == MAIN_MENU)
 	{
 		if (selectedItem < 0)
 		{
@@ -107,14 +109,15 @@ void Menu::MoveUp()
 void Menu::MoveDown()
 {
 	++selectedItem;
-	if (option == MAIN)
+	if (Game::Get().get_game_state() == MAIN_MENU)
 	{
 		if (selectedItem > 2)
 		{
 			selectedItem = 0;
 		}
 	}
-	else if(option == OPTIONS) {
+	else //if(option == OPTIONS)
+	{
 		if (selectedItem > 5)
 		{
 			selectedItem = 0;
@@ -127,7 +130,7 @@ void Menu::CheckEvents(sf::Event ev, sf::RenderWindow *& window, std::map<Keys, 
 	
 	if (ev.type == sf::Event::KeyPressed)
 	{
-		if (option == MAIN)
+		if (Game::Get().get_game_state() == MAIN_MENU)
 		{
 			if (ev.key.code == keys[UP])
 			{
@@ -145,7 +148,8 @@ void Menu::CheckEvents(sf::Event ev, sf::RenderWindow *& window, std::map<Keys, 
 				Game::Get().set_game_state(PLAYING);
 				break;
 			case 1:
-				option = OPTIONS;
+				Game::Get().set_game_state(OPTIONS);
+				//option = OPTIONS;
 				selectedItem = 0;
 				break;
 			case 2:
@@ -154,12 +158,12 @@ void Menu::CheckEvents(sf::Event ev, sf::RenderWindow *& window, std::map<Keys, 
 			}
 			}
 		}
-		else if (option == OPTIONS)
+		else if (Game::Get().get_game_state() == OPTIONS)
 		{
 			if (ev.key.code == keys[ESCAPE])
 			{
 				selectedItem = 0;
-				option = MAIN;
+				Game::Get().set_game_state(MAIN_MENU);
 			}
 			else if (ev.key.code == keys[UP])
 			{
@@ -265,7 +269,7 @@ int Menu::set_Key(std::map<Keys, sf::Keyboard::Key>& keys, sf::RenderWindow *& w
 
 void Menu::Draw(sf::RenderWindow *& window)
 {
-	if (option == MAIN)
+	if (Game::Get().get_game_state() == MAIN_MENU)
 	{
 		window->draw(Title);
 		for (int i = 2; i >= 0; --i)
@@ -288,7 +292,7 @@ void Menu::Draw(sf::RenderWindow *& window)
 			break;
 		}
 	}
-	else if (option == OPTIONS)
+	else if (Game::Get().get_game_state() == OPTIONS)
 	{
 		for (int i = 8; i >= 3; --i)
 		{

@@ -36,9 +36,16 @@
     <ClCompile Include="Sprites.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -65,6 +72,12 @@
     <ClInclude Include="Sprites.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Tanks.rc">
@@ -87,6 +100,9 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Resources\block.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Bullets.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

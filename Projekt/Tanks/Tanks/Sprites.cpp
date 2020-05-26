@@ -20,4 +20,8 @@ Sprites::Sprites()
 	{
 		throw "sth";
 	}
+	if (!textures["Bullets"].loadFromFile("Resources/Bullets.png"))
+	{
+		throw "sth";
+	}
 }

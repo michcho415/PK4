@@ -1,23 +1,34 @@
 #include "Object.h"
 #include <fstream>
+#include <iostream>
+#include <cmath>
 
-Object::Object()
+Object::Object(): tile_x(0), tile_y(0), dir(UP_)
 {
 }
 
-Object::Object(float x, float y, float speed): x(x), y(y), velocity(speed)
+Object::~Object()
+{
+}
+
+Object::Object(float x, float y, float speed, Direction d): x(x), y(y), velocity(speed), tile_x(0), tile_y(0), dir(d)
 {
 
 }
 
-void Object::setPosition(float a, float b)
+//Oblicza na ktorej czesci mapy jest obiekt
+void Object::set_Tile()
 {
-	x = a;
-	y = b;
+
 }
 
-void Object::shapeSprite(sf::IntRect & x)
+Direction Object::get_direction()
 {
-	sprite.setTextureRect(x);
+	return dir;
+}
+
+sf::Vector2f Object::getPosition() const
+{
+	return sf::Vector2f(x, y);
 }
 
