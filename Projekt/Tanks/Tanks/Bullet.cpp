@@ -19,8 +19,11 @@ Bullet::Bullet(float x, float y, float speed, Direction dir):Object(x, y, speed,
 
 void Bullet::set_Tile()
 {
-	tile_x = (int)(x / 16);
-	tile_y = (int)(y / 16);
+	tile_x = (int)floor((x - 52) / 16); //-52
+	tile_y = (int)floor((y - 32) / 16); //-32 
+	//tile_x_2 = (int)floor((x - 24) / 16); //dobrac tak zeby przy danym x nie bylo kolizji //-26 -24
+	//tile_y_2 = (int)floor((y - 4) / 16);
+	std::cout << "X:" << tile_x << "Y: " << tile_y << '\n';
 }
 
 
@@ -44,6 +47,7 @@ void Bullet::Update(sf::Event & ev, float dt)
 		break;
 	}
 	sprite.setPosition(x, y);
+	this->set_Tile();
 }
 
 void Bullet::Set_sprite(Direction d)

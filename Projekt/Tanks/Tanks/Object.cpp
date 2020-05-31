@@ -32,3 +32,13 @@ sf::Vector2f Object::getPosition() const
 	return sf::Vector2f(x, y);
 }
 
+int Object::get_tile_x()
+{
+	return tile_x;
+}
+
+int Object::get_tile_y()
+{
+	return tile_y;
+}
+

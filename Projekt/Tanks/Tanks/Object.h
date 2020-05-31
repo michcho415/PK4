@@ -30,6 +30,8 @@ public:
 	virtual void Update(sf::Event & ev, float dt) = 0; //TO DO: Player, Enemy
 	Direction get_direction();
 	sf::Vector2f getPosition()const;
+	int get_tile_x();
+	int get_tile_y();
 
 
 	

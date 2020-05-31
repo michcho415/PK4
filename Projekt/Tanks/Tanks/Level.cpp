@@ -57,7 +57,10 @@ void Level::Draw(sf::RenderWindow *& window)
 	{
 		for (size_t j = 0; j < data[i].size(); ++j)
 		{
-			data[i][j].Draw(window);
+			if (data[i][j].get_block_type() != NONE)
+			{
+				data[i][j].Draw(window);
+			}
 		}
 		
 	}
@@ -76,6 +79,11 @@ void Level::Draw_background(sf::RenderWindow *& window)
 Block Level::get_block(int x, int y)
 {
 	return data[y][x];
+}
+
+void Level::set_block(int x, int y, Block_type type)
+{
+	data[y][x].setSprite(type);
 }
 
 float Level::get_Center_x()

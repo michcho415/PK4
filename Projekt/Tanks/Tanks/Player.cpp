@@ -57,7 +57,12 @@ void Player::Update(sf::Event & ev, float dt)
 		}
 		else if (ev.key.code == keys[SHOOT])
 		{
-			Game::Get().Create_Bullet(this);
+			if (Game::Get().get_bullet_time() > 0.4)
+			{
+				Game::Get().Create_Bullet(this);
+				Game::Get().restart_bullet_clock();
+			}
+			
 		}
 		
 	}

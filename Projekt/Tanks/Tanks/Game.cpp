@@ -1,9 +1,11 @@
 #include "Game.h"
 #include "Level.h"
+#include "Block.h"
+
 #include <iostream>
 
 
-Game::Game():game_state(MAIN_MENU), game_difficulty(EASY), bullet_speed(0.4f)
+Game::Game():game_state(MAIN_MENU), game_difficulty(EASY), bullet_speed(0.2f)
 {
 	
 
@@ -23,6 +25,7 @@ void Game::Run()
 
 	window->setFramerateLimit(60);
 	window->setVerticalSyncEnabled(true);
+
 	sf::Clock clock;
 	sf::Time time;
 	float delta_time;
@@ -62,11 +65,12 @@ void Game::Run()
 			window->clear(sf::Color(145,145,145));
 			stage->Draw_background(window);
 			player->Draw(window);
-			stage->Draw(window);
 			for (auto& el : bullets)
 			{
 				el->Draw(window);
 			}
+			stage->Draw(window);
+
 			Check_bullet_collisons(bullets);
 
 		}
@@ -97,7 +101,25 @@ void Game::InitDefaultKeys()
 */
 void Game::Create_Bullet(Object* ob)
 {
-	Object* bullet = new Bullet(ob->getPosition().x + block_size, ob->getPosition().y + block_size, bullet_speed, ob->get_direction());
+	int spawn_position_x = ob->getPosition().x;
+	int spawn_position_y = ob->getPosition().y;
+	if (ob->get_direction() == UP_)
+	{
+		spawn_position_y -= block_size;
+	}
+	else if (ob->get_direction() == DOWN_)
+	{
+		spawn_position_y += block_size;
+	}
+	else if (ob->get_direction() == LEFT_)
+	{
+		spawn_position_x -= block_size;
+	}
+	else if (ob->get_direction() == RIGHT_)
+	{
+		spawn_position_x += block_size;
+	}
+	Object* bullet = new Bullet(spawn_position_x + block_size, spawn_position_y + block_size, bullet_speed, ob->get_direction());
 	bullets.push_back(bullet);
 }
 
@@ -112,9 +134,14 @@ void Game::Check_bullet_collisons(std::vector<Object*> & bullets)
 			delete *it;
 			it = bullets.erase(it);
 		}
-		else if (false) // niszczenie bloczka
-		{
+		//else if(false) // niszczenie czo³gu
+		//{
 
+		//}
+		else if (Check_if_bullet_collides_with_block(*it)) // niszczenie bloczka
+		{
+			delete *it;
+			it = bullets.erase(it);		
 		}
 		else {
 			
@@ -138,5 +165,42 @@ bool Game::Check_if_bullet_is_not_on_map(const Object * bullet) const
 	}
 	return false;
 }
+
+bool Game::Check_if_bullet_collides_with_block(Object * bullet)
+{
+
+	if (stage->get_block(bullet->get_tile_x(), bullet->get_tile_y()).get_block_type() == BUSH ||
+		stage->get_block(bullet->get_tile_x(), bullet->get_tile_y()).get_block_type() == NONE) // nie niszczy i moze przeleciec
+	{
+		return false;
+	}
+	else if (stage->get_block(bullet->get_tile_x(), bullet->get_tile_y()).get_block_type() == METAL)// nie niszczy ale moze przeleciec
+	{
+		
+		return true;
+	}
+	else if (stage->get_block(bullet->get_tile_x(), bullet->get_tile_y()).get_block_type() == BRICK) //niszczy
+	{
+		stage->set_block(bullet->get_tile_x(), bullet->get_tile_y(), NONE);
+		return true;
+	}
+	return false;
+}
+
+float Game::get_bullet_time()
+{
+	float elapsed_time = bullet_clock.getElapsedTime().asSeconds();
+	return elapsed_time;
+
+}
+
+void Game::restart_bullet_clock()
+{
+	bullet_clock.restart();
+}
+
+
+
+
 
 

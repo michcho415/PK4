@@ -26,6 +26,7 @@ public:
 	const static size_t get_size_x() { return size_x; }
 	const static size_t get_size_y() { return size_y; }
 	Block get_block(int x, int y);
+	void set_block(int x, int y, Block_type type);
 
 
 
