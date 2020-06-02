@@ -23,6 +23,7 @@ private:
 	const unsigned int block_size = 16;
 	float bullet_speed;
 	float entity_speed;
+	float ratio;
 	sf::Clock bullet_clock;
 
 
@@ -60,8 +61,11 @@ public:
 	void Check_bullet_collisons(std::vector<Object*> & bullets);
 	bool Check_if_bullet_is_not_on_map(const Object * bullet)const;
 	bool Check_if_bullet_collides_with_block(Object * bullet);
+	bool Check_if_bullet_destroys_entity(Object* bullet);
 	float get_bullet_time();
 	void restart_bullet_clock();
+	void Init_if_game_diff_selected();
+	
 };
 
 #endif // !GAME_H

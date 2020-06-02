@@ -13,6 +13,7 @@ public:
 	Bullet();
 	~Bullet();
 	Bullet(float x, float y, float speed, Direction dir);
+	int get_size();
 	void set_Tile();
 	void Update(sf::Event & ev, float dt);
 	void Set_sprite(Direction d);

@@ -11,6 +11,7 @@ public:
 
 public:
 	Player(float x, float y, float speed, Direction dir);
+	int get_size();
 	void set_Tile();
 	void Draw(sf::RenderWindow *& window);
 	void Update(sf::Event & ev, float dt);

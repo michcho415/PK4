@@ -13,6 +13,11 @@ Player::Player(float x, float y, float speed, Direction dir): Object(x, y, speed
 	//else if (Game::Get().get_difficulty() == HARD) { velocity = 1.5; }
 }
 
+int Player::get_size()
+{
+	return size;
+}
+
 void Player::set_Tile()
 {
 

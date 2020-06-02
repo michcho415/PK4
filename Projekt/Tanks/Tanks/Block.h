@@ -8,11 +8,14 @@ enum Block_type {NONE, BRICK, METAL, BUSH};
 
 class Block: public Object
 {
+	int size = 8;
 	Block_type bl_type;
 	
 public:
 	Block();
 	Block(float x, float y); 
+	Block(Block & o) = default;
+	int get_size();
 	void set_Tile();
 	void Draw(sf::RenderWindow *& window);
 	void setSprite(Block_type type);

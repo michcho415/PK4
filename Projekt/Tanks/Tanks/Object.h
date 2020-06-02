@@ -24,6 +24,7 @@ public:
 	Object();
 	virtual ~Object();
 	Object(float x, float y, float speed, Direction d);
+	virtual int get_size() = 0;
 	virtual void set_Tile() = 0;
 	virtual void shape_Sprite(sf::IntRect & x) = 0;
 	virtual void Draw(sf::RenderWindow *& window) = 0;

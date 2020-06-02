@@ -17,6 +17,11 @@ Bullet::Bullet(float x, float y, float speed, Direction dir):Object(x, y, speed,
 	Set_sprite(dir);
 }
 
+int Bullet::get_size()
+{
+	return size;
+}
+
 void Bullet::set_Tile()
 {
 	tile_x = (int)floor((x - 52) / 16); //-52

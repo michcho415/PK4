@@ -8,6 +8,12 @@ Block::Block(): Object(), bl_type(NONE)
 
 Block::Block(float x, float y) : Object(x, y, 0, UP_)
 {
+	size = 8;
+}
+
+int Block::get_size()
+{
+	return size;
 }
 
 void Block::set_Tile()
