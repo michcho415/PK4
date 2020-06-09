@@ -8,6 +8,7 @@ class Sprites
 
 public:
 	sf::Sprite get_sprite(const std::string & name, sf::IntRect x);
+
 	
 	Sprites();
 	Sprites(const Sprites & o) = delete;

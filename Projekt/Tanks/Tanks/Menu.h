@@ -7,7 +7,7 @@ enum Difficulty { EASY, MEDIUM, HARD };
 
 enum Keys { UP, DOWN, LEFT, RIGHT, SHOOT, ENTER, ESCAPE };
 
-enum Game_State { PLAYING, MAIN_MENU, OPTIONS, EXIT };
+enum Game_State { PLAYING, MAIN_MENU, OPTIONS, EXIT, OVER };
 
 
 class Menu
@@ -18,7 +18,9 @@ private:
 	sf::Font font;
 	sf::Text menu[10];
 	sf::Text KeysText[10];
+	sf::Text PointsText;
 	sf::Text press_key;
+	sf::Text Score;
 	sf::Texture tex;
 	sf::Texture title;
 	sf::Sprite select_sprite;

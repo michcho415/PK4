@@ -10,17 +10,17 @@ public:
 	const int size = 32;
 
 public:
-	Player(float x, float y, float speed, Direction dir);
+	Player(double x, double y, double speed, Direction dir);
 	int get_size();
 	void set_Tile();
 	void Draw(sf::RenderWindow *& window);
-	void Update(sf::Event & ev, float dt);
-	void shape_Sprite(sf::IntRect & x);
-	void Move_Up(const float & dt);
-	void Move_Down(const float & dt);
-	void Move_Left(const float & dt);
-	void Move_Right(const float & dt);
+	void Update(sf::Event & ev, double dt);
+	void Move_Up(const double & dt);
+	void Move_Down(const double & dt);
+	void Move_Left(const double & dt);
+	void Move_Right(const double & dt);
 	const int get_player_size();
+	bool Check_collision_on_tiles(int Tile_x, int Tile_y);
 	
 	
 	

@@ -1,34 +1,50 @@
 #include "Game.h"
 #include "Level.h"
 #include "Block.h"
+#include "Enemy.h"
 
 #include <iostream>
+#include <typeinfo>
 
-
-Game::Game():game_state(MAIN_MENU), game_difficulty(EASY), entity_speed(0.2f)
+Game::Game():game_state(MAIN_MENU), game_difficulty(EASY), entity_speed(0.2), enemies_on_map(0), score(0), block_size(16)
 {
 	
-
+	Sprites instance;
 	window = new sf::RenderWindow(sf::VideoMode(640, 480), "Game");
 	menu = new Menu(window);
 	stage = new Level(window);
 	InitDefaultKeys();
 	stage->LoadLevelfromFile("Stage1.txt");
-	player = new Player(stage->get_Center_x()-64, stage->get_Center_y()+176, entity_speed, UP_);
+	player = new Player(stage->get_Center_x()-64, stage->get_Center_y()+174, entity_speed, UP_); // wywalic st¹d inicjalizowac z
 	entities.push_back(std::move(player));
+	
 
+}
+
+Game::~Game()
+{
+	for (auto&el : entities)
+	{
+		delete el;
+	}
+	for (auto& el : bullets)
+	{
+		delete el;
+	}
+	delete stage;
+	delete menu;
+	delete window;
 }
 
 void Game::Run()
 {
-
-
 	window->setFramerateLimit(60);
 	window->setVerticalSyncEnabled(true);
 
 	sf::Clock clock;
 	sf::Time time;
-	float delta_time;
+	
+	float delta_time= 0;
 	while (window->isOpen())
 	{
 
@@ -43,45 +59,84 @@ void Game::Run()
 			{
 				menu->CheckEvents(event, window, keys);
 				Init_if_game_diff_selected();
+				score = 0;
+				spawn_clock.restart();
+				
 			}
 			else if (game_state == PLAYING)
 			{
-				player->Update(event, delta_time);
+				if (player != nullptr)
+				{
+					player->Update(event, delta_time);
+				}
 
 			}
 
 		}
-		for (auto& el : bullets)
+		if (game_state == PLAYING)
 		{
-			el->Update(event, delta_time);
-		}
-		
-		if (game_state == MAIN_MENU || game_state == OPTIONS)
-		{
-			window->clear(sf::Color::Black);
-			menu->Draw(window);
-		}
-		else if (game_state == PLAYING)
-		{
-			window->clear(sf::Color(145,145,145));
-			stage->Draw_background(window);
-			player->Draw(window);
+			for (auto it = entities.begin() + 1; it < entities.end(); ++it)
+			{
+				(*it)->Update(event, delta_time);
+			}
 			for (auto& el : bullets)
 			{
-				el->Draw(window);
+				el->Update(event, delta_time);
 			}
-			stage->Draw(window);
+			
+
+			if (spawn_clock.getElapsedTime().asSeconds() > 2)
+			{
+				Spawn_enemy();
+			}
+			for (auto it = entities.begin() + 1; it < entities.end(); it++)
+			{
+				dynamic_cast<Enemy*>(*it)->Choose_action();
+			}
 
 			Check_bullet_collisons(bullets);
 
+
 		}
-		
-		window->display();
+		Draw(window);
 		time = clock.restart();
 		delta_time = static_cast<float>(time.asMilliseconds());
+	}
+}
 
+void Game::Draw(sf::RenderWindow * window)
+{
+
+	if (game_state == MAIN_MENU || game_state == OPTIONS)
+	{
+		window->clear(sf::Color::Black);
+		menu->Draw(window);
+		
 		
 	}
+	else if (game_state == PLAYING)
+	{
+		window->clear(sf::Color(145, 145, 145));
+		stage->Draw_background(window);
+		for (auto& el : bullets)
+		{
+			el->Draw(window);
+		}
+		for (auto& el : entities)
+		{
+			el->Draw(window);
+		}
+		stage->Draw(window);
+
+		menu->Draw(window);
+		
+	}
+	else if (game_state == OVER)
+	{
+		window->clear(sf::Color::Black);
+		
+	}
+	window->display();
 }
 
 /** Metoda inicjuje domyœlne klawisze do obs³ugi wejœcia w grze.
@@ -102,6 +157,18 @@ void Game::InitDefaultKeys()
 */
 void Game::Create_Bullet(Object* ob)
 {
+	float entitity_bullet_speed;
+	bool is_players;
+	if (typeid(Player) == typeid(*ob))
+	{
+		is_players = 1;
+		entitity_bullet_speed = bullet_speed * ratio;
+	}
+	else {
+		is_players = 0;
+		entitity_bullet_speed = bullet_speed;
+	}
+
 	int spawn_position_x = ob->getPosition().x;
 	int spawn_position_y = ob->getPosition().y;
 	if (ob->get_direction() == UP_)
@@ -120,7 +187,9 @@ void Game::Create_Bullet(Object* ob)
 	{
 		spawn_position_x += (block_size + 1);
 	}
-	Object* bullet = new Bullet(spawn_position_x + block_size, spawn_position_y + block_size, bullet_speed, ob->get_direction());
+	
+
+	Object* bullet = new Bullet(spawn_position_x + block_size, spawn_position_y + block_size, entitity_bullet_speed, ob->get_direction(), is_players);
 	bullets.push_back(bullet);
 }
 
@@ -130,27 +199,17 @@ void Game::Check_bullet_collisons(std::vector<Object*> & bullets)
 	for (auto it = bullets.begin(); it < bullets.end();)
 	{
 		
-		if (Check_if_bullet_is_not_on_map(*it))
+		if (Check_if_bullet_is_not_on_map(*it) ||
+			Check_if_bullet_destroys_entity(*it) ||
+			Check_if_bullet_collides_with_block(*it))
 		{
 			delete *it;
 			it = bullets.erase(it);
-		}
-		else if(Check_if_bullet_destroys_entity(*it)) // niszczenie czo³gu
-		{
-			delete *it;
-			it = bullets.erase(it);
-		}
-		else if (Check_if_bullet_collides_with_block(*it)) // niszczenie bloczka
-		{
-			delete *it;
-			it = bullets.erase(it);		
 		}
 		else {
 			
 			++it;
 		}
-		
-		
 
 	}
 
@@ -170,17 +229,18 @@ bool Game::Check_if_bullet_is_not_on_map(const Object * bullet) const
 
 bool Game::Check_if_bullet_collides_with_block(Object * bullet)
 {
+	Block_type temp = stage->get_block(bullet->get_tile_x(), bullet->get_tile_y()).get_block_type();
 
-	if (stage->get_block(bullet->get_tile_x(), bullet->get_tile_y()).get_block_type() == BUSH ||
-		stage->get_block(bullet->get_tile_x(), bullet->get_tile_y()).get_block_type() == NONE) // nie niszczy i moze przeleciec
+	if (temp == BUSH ||
+		temp == NONE) // nie niszczy i moze przeleciec
 	{
 		return false;
 	}
-	else if (stage->get_block(bullet->get_tile_x(), bullet->get_tile_y()).get_block_type() == METAL)// nie niszczy ale moze przeleciec
+	else if (temp == METAL)// nie niszczy ale moze przeleciec
 	{
 		return true;
 	}
-	else if (stage->get_block(bullet->get_tile_x(), bullet->get_tile_y()).get_block_type() == BRICK) //niszczy
+	else if (temp == BRICK) //niszczy
 	{
 		stage->set_block(bullet->get_tile_x(), bullet->get_tile_y(), NONE);
 		return true;
@@ -190,15 +250,38 @@ bool Game::Check_if_bullet_collides_with_block(Object * bullet)
 
 bool Game::Check_if_bullet_destroys_entity(Object * bullet)
 {
-	for (auto it2 = entities.begin(); it2 < entities.end(); ++it2)
+	for (auto it2 = entities.begin(); it2 < entities.end(); )
 	{
-		if (bullet->getPosition().x > (*it2)->getPosition().x - 8 && //(*it)->get_size() / 2
-			bullet->getPosition().x < (*it2)->getPosition().x + 8 &&
-			bullet->getPosition().y >(*it2)->getPosition().y - 8 / 2 &&
-			bullet->getPosition().y < (*it2)->getPosition().y + 8 / 2)
+		
+		if (bullet->getPosition().x > (*it2)->getPosition().x && 
+			bullet->getPosition().x < (*it2)->getPosition().x + 32 && // (*it2)->get_size()
+			bullet->getPosition().y > (*it2)->getPosition().y &&
+			bullet->getPosition().y < (*it2)->getPosition().y + 32) //sprawdz czy kula nachodzi za gracza
 		{
-			if(it2) //RTTI do sprawdzenia czy gracz umar³
+			Object * ob = *it2;
+			if (typeid(*ob) != typeid(Player) ) //RTTI do sprawdzenia czy gracz umar³
+			{
+				if (dynamic_cast<Bullet*>(bullet)->get_belongingness() == false) // jesli jest od przeciwnika
+				{
+					return true;
+				}
+				else {
+					score += 10 * ratio;
+				}
+				--enemies_on_map;
+			}
+			else {
+				set_game_state(OVER);
+				//player = nullptr; // usun gracza
+				
+			}
+			
+			delete *it2;
+			it2 = entities.erase(it2);
 			return true;
+		}
+		else {
+			++it2;
 		}
 		
 	}
@@ -220,22 +303,52 @@ void Game::restart_bullet_clock()
 
 void Game::Init_if_game_diff_selected()
 {
+	bullet_speed = 0.3f;
 	switch (game_difficulty)
 	{
 	case EASY:
-		bullet_speed = 0.3f;
-		ratio = 1;
+		
+		ratio = 0.6f;
 		break;
 	case MEDIUM:
-		bullet_speed = 0.4f;
-		ratio = 1.05;
+
+		ratio = 0.7f;
 		break;
 	case HARD:
-		bullet_speed = 0.6f;
-		ratio = 1.2f;
+
+		ratio = 0.9f;
 		break;
 	}
 }
+
+void Game::Spawn_enemy()
+{
+	if (enemies_on_map < 3)
+	{
+		Object * enemy = new Enemy(stage->get_Center_x() - stage->get_size_x()/2 + 1, stage->get_Center_y() - stage->get_size_y()/2 + 1, entity_speed*ratio, DOWN_);
+		entities.push_back(enemy);
+		++enemies_on_map;
+		spawn_clock.restart();
+
+	}
+
+}
+
+bool Game::Check_if_entity_is_not_on_map(Object * entity)
+{
+	if (entity->getPosition().y <= stage->get_Center_y() - 13 * block_size - 2  ||
+		entity->getPosition().y >= stage->get_Center_y() + 11 * block_size + 2 ||
+		entity->getPosition().x <= stage->get_Center_x() - 13 * block_size - 2 ||
+		entity->getPosition().x >= stage->get_Center_x() + 11 * block_size + 2)
+		
+	{
+		return true;
+	}
+	return false;
+}
+
+
+
 
 
 

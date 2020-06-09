@@ -6,23 +6,23 @@
 
 class Bullet: public Object {
 private:
-
+	bool is_players;
 	const int size = 16;
 
 public:
 	Bullet();
 	~Bullet();
-	Bullet(float x, float y, float speed, Direction dir);
+	Bullet(double x, double y, double speed, Direction dir, bool whose);
 	int get_size();
 	void set_Tile();
-	void Update(sf::Event & ev, float dt);
+	void Update(sf::Event & ev, double dt);
 	void Set_sprite(Direction d);
 	void Draw(sf::RenderWindow *& window);
-	void shape_Sprite(sf::IntRect & x);
-	void Move_Up(float dt);
-	void Move_Down(float dt);
-	void Move_Left(float dt);
-	void Move_Right(float dt);
+	void Move_Up(double dt);
+	void Move_Down(double dt);
+	void Move_Left(double dt);
+	void Move_Right(double dt);
+	bool get_belongingness();
 	
 };
 #endif // ! BULLET_H

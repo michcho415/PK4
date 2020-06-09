@@ -8,19 +8,17 @@ enum Block_type {NONE, BRICK, METAL, BUSH};
 
 class Block: public Object
 {
-	int size = 8;
+	int size;
 	Block_type bl_type;
 	
 public:
 	Block();
-	Block(float x, float y); 
-	Block(Block & o) = default;
+	Block(double x, double y);
 	int get_size();
 	void set_Tile();
 	void Draw(sf::RenderWindow *& window);
 	void setSprite(Block_type type);
-	void Update(sf::Event & ev, float dt);
-	void shape_Sprite(sf::IntRect & x);
+	void Update(sf::Event & ev, double dt);
 	Block_type get_block_type() { return bl_type; }
 
 };

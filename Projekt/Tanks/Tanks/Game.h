@@ -20,12 +20,14 @@ private:
 	std::map<Keys, sf::Keyboard::Key> keys;
 	Game_State game_state;
 	Difficulty game_difficulty;
-	const unsigned int block_size = 16;
+	const unsigned int block_size;
 	float bullet_speed;
-	float entity_speed;
+	double entity_speed;
 	float ratio;
+	int enemies_on_map;
 	sf::Clock bullet_clock;
-
+	sf::Clock spawn_clock;
+	int score;
 
 	//
 	Menu* menu;
@@ -41,7 +43,7 @@ private:
 public:
 
 	Game();
-	//~Game();
+	~Game();
 	Game(const Game & o) = delete;
 	static Game & Get() { static Game Game; return Game; }
 
@@ -57,6 +59,7 @@ public:
 
 	void Create_Bullet(Object* ob);
 	void Run();
+	void Draw(sf::RenderWindow * window);
 	void InitDefaultKeys();
 	void Check_bullet_collisons(std::vector<Object*> & bullets);
 	bool Check_if_bullet_is_not_on_map(const Object * bullet)const;
@@ -65,6 +68,9 @@ public:
 	float get_bullet_time();
 	void restart_bullet_clock();
 	void Init_if_game_diff_selected();
+	void Spawn_enemy();
+	bool Check_if_entity_is_not_on_map(Object* entity);
+	
 	
 };
 

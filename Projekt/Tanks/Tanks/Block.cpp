@@ -6,9 +6,9 @@ Block::Block(): Object(), bl_type(NONE)
 {
 }
 
-Block::Block(float x, float y) : Object(x, y, 0, UP_)
+Block::Block(double x, double y) : Object(x, y, 0, UP_)
 {
-	size = 8;
+	size = 16;
 }
 
 int Block::get_size()
@@ -17,8 +17,7 @@ int Block::get_size()
 }
 
 void Block::set_Tile()
-{
-}
+{}
 
 void Block::Draw(sf::RenderWindow *& window)
 {
@@ -45,11 +44,9 @@ void Block::setSprite(Block_type type)
 	sprite.setPosition(x, y);
 }
 
-void Block::Update(sf::Event & ev, float dt)
+void Block::Update(sf::Event & ev, double dt)
 {
 
 }
 
-void Block::shape_Sprite(sf::IntRect & x)
-{
-}
+

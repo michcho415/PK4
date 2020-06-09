@@ -23,8 +23,8 @@ public:
 	float get_Center_x();
 	float get_Center_y();
 	void Draw_background(sf::RenderWindow *& window);
-	const static size_t get_size_x() { return size_x; }
-	const static size_t get_size_y() { return size_y; }
+	const float get_size_x() const;
+	const float get_size_y() const;
 	Block get_block(int x, int y);
 	void set_block(int x, int y, Block_type type);
 

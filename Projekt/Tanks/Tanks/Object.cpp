@@ -7,11 +7,7 @@ Object::Object(): tile_x(0), tile_y(0), dir(UP_)
 {
 }
 
-Object::~Object()
-{
-}
-
-Object::Object(float x, float y, float speed, Direction d): x(x), y(y), velocity(speed), tile_x(0), tile_y(0), dir(d)
+Object::Object(double x, double y, double speed, Direction d): x(x), y(y), velocity(speed), tile_x(0), tile_y(0), dir(d)
 {
 
 }

@@ -14,21 +14,20 @@ protected:
 
 	sf::Sprite sprite;
 	Direction dir;
-	float x, y;
-	float velocity;
+	double x, y;
+	double velocity;
 	int tile_x, tile_y;
 	int tile_x_2, tile_y_2;
 	
 
 public:
 	Object();
-	virtual ~Object();
-	Object(float x, float y, float speed, Direction d);
+	virtual ~Object() = default;
+	Object(double x, double y, double speed, Direction d);
 	virtual int get_size() = 0;
 	virtual void set_Tile() = 0;
-	virtual void shape_Sprite(sf::IntRect & x) = 0;
 	virtual void Draw(sf::RenderWindow *& window) = 0;
-	virtual void Update(sf::Event & ev, float dt) = 0; //TO DO: Player, Enemy
+	virtual void Update(sf::Event & ev, double dt) = 0;
 	Direction get_direction();
 	sf::Vector2f getPosition()const;
 	int get_tile_x();

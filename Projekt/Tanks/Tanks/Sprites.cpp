@@ -6,6 +6,7 @@ sf::Sprite Sprites::get_sprite(const std::string & name, sf::IntRect x)
 	return 	sf::Sprite(textures[name], x);
 }
 
+
 Sprites::Sprites()
 {
 	if (!textures["Tanks"].loadFromFile("Resources/tank.png"))
@@ -24,4 +25,5 @@ Sprites::Sprites()
 	{
 		throw "sth";
 	}
+
 }

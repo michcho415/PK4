@@ -4,7 +4,7 @@
 #include "Sprites.h"
 #include <fstream>
 
-void Level::LoadLevelfromFile(const std::string & filename)
+void Level::LoadLevelfromFile(const std::string & filename) // dodac switch
 {
 	std::ifstream input(R"(Stages\)" + filename);
 	int block_type;
@@ -74,6 +74,16 @@ float Level::get_Center_y()
 void Level::Draw_background(sf::RenderWindow *& window)
 {
 	window->draw(square);
+}
+
+const float Level::get_size_x() const
+{
+	return square.getSize().x;
+}
+
+const float Level::get_size_y() const
+{
+	return square.getSize().y;
 }
 
 Block Level::get_block(int x, int y)

@@ -84,6 +84,14 @@ Menu::Menu(sf::RenderWindow *& window):selectedItem(0)
 		SetPositionfromCenter(menu[i], window, -45.0f, -160.0f + 30.0f * i);
 		SetPositionfromCenter(KeysText[i-3], window, 80.0f, -160.0f + 30.0f * i);
 	}
+	//UI
+	PointsText.setFont(font);
+	PointsText.setCharacterSize(10);
+	PointsText.setString("POINTS:");
+	CenterOrigin(PointsText);
+	SetPositionfromCenter(PointsText, window, 190, -200);
+
+
 	
 
 }
@@ -330,6 +338,10 @@ void Menu::Draw(sf::RenderWindow *& window)
 			break;
 
 		}
+	}
+	else if (Game::Get().get_game_state() == PLAYING)
+	{
+		window->draw(PointsText);
 	}
 }
 

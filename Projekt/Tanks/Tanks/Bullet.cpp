@@ -5,16 +5,18 @@
 
 Bullet::Bullet() : Object()
 {
-
+	sprite = Sprites::Get().get_sprite("Bullets", sf::IntRect(2 * size, 0, size, size));
+	
 }
 
 Bullet::~Bullet()
 {
 }
 
-Bullet::Bullet(float x, float y, float speed, Direction dir):Object(x, y, speed, dir)
+Bullet::Bullet(double x, double y, double speed, Direction dir, bool whose):Object(x, y, speed, dir), is_players(whose)
 {
 	Set_sprite(dir);
+
 }
 
 int Bullet::get_size()
@@ -28,11 +30,11 @@ void Bullet::set_Tile()
 	tile_y = (int)floor((y - 32) / 16); //-32 
 	//tile_x_2 = (int)floor((x - 24) / 16); //dobrac tak zeby przy danym x nie bylo kolizji //-26 -24
 	//tile_y_2 = (int)floor((y - 4) / 16);
-	std::cout << "X:" << tile_x << "Y: " << tile_y << '\n';
+	//std::cout << "X:" << tile_x << "Y: " << tile_y << '\n';
 }
 
 
-void Bullet::Update(sf::Event & ev, float dt)
+void Bullet::Update(sf::Event & ev, double dt)
 {
 	switch (dir)
 	{
@@ -81,26 +83,30 @@ void Bullet::Draw(sf::RenderWindow *& window)
 	window->draw(sprite);
 }
 
-void Bullet::shape_Sprite(sf::IntRect & x)
-{
-}
 
-void Bullet::Move_Up(float dt)
+
+void Bullet::Move_Up(double dt)
 {
 	y -= velocity * dt;
 }
 
-void Bullet::Move_Down(float dt)
+void Bullet::Move_Down(double dt)
 {
 	y += velocity * dt;
 }
 
-void Bullet::Move_Left(float dt)
+void Bullet::Move_Left(double dt)
 {
 	x -= velocity * dt;
 }
 
-void Bullet::Move_Right(float dt)
+void Bullet::Move_Right(double dt)
 {
 	x += velocity * dt;
 }
+
+bool Bullet::get_belongingness()
+{
+	return is_players;
+}
+
