@@ -12,28 +12,28 @@ Object::Object(double x, double y, double speed, Direction d): x(x), y(y), veloc
 
 }
 
-//Oblicza na ktorej czesci mapy jest obiekt
-void Object::set_Tile()
-{
-
-}
-
-Direction Object::get_direction()
+Direction Object::Get_direction()
 {
 	return dir;
 }
 
-sf::Vector2f Object::getPosition() const
+sf::Vector2f Object::Get_position() const
 {
 	return sf::Vector2f(x, y);
 }
 
-int Object::get_tile_x()
+void Object::Set_position(double X, double Y)
+{
+	x = X;
+	y = Y;
+}
+
+int Object::Get_tile_x()
 {
 	return tile_x;
 }
 
-int Object::get_tile_y()
+int Object::Get_tile_y()
 {
 	return tile_y;
 }

@@ -11,32 +11,35 @@ Block::Block(double x, double y) : Object(x, y, 0, UP_)
 	size = 16;
 }
 
-int Block::get_size()
+int Block::Get_size()
 {
 	return size;
 }
 
-void Block::set_Tile()
-{}
+void Block::Set_tile()
+{
+	tile_x = (x - 52) / 16;
+	tile_y = (y - 32) / 16;
+}
 
 void Block::Draw(sf::RenderWindow *& window)
 {
 	window->draw(sprite);
 }
 
-void Block::setSprite(Block_type type)
+void Block::Set_sprite(Block_type type)
 {
 	bl_type = type;
 	switch (type)
 	{
 	case BRICK:
-		sprite = Sprites::Get().get_sprite("Blocks", sf::IntRect(0, 0, 16, 16));
+		sprite = Sprites::Get().Get_sprite("Blocks", sf::IntRect(0, 0, 16, 16));
 		break;
 	case METAL:
-		sprite = Sprites::Get().get_sprite("Blocks", sf::IntRect(224, 0, 16, 16));
+		sprite = Sprites::Get().Get_sprite("Blocks", sf::IntRect(224, 0, 16, 16));
 		break;
 	case BUSH:
-		sprite = Sprites::Get().get_sprite("Blocks", sf::IntRect(208, 0, 16, 16));
+		sprite = Sprites::Get().Get_sprite("Blocks", sf::IntRect(208, 0, 16, 16));
 		break;
 
 	}

@@ -5,18 +5,18 @@
 
 Player::Player(double x, double y, double speed, Direction dir): Object(x, y, speed, dir)
 {
-	sprite = Sprites::Get().get_sprite("Tanks", sf::IntRect(0, 0, 32, 32));
+	sprite = Sprites::Get().Get_sprite("Tanks", sf::IntRect(0, 0, 32, 32));
 	sprite.setPosition(x, y);
-	this->set_Tile();
+	this->Set_tile();
 	
 }
 
-int Player::get_size()
+int Player::Get_size()
 {
 	return size;
 }
 
-void Player::set_Tile()
+void Player::Set_tile()
 {
 	if (dir == UP_)
 	{
@@ -58,14 +58,15 @@ void Player::Draw(sf::RenderWindow *& window)
 	window->draw(sprite);
 }
 
-void Player::Update(sf::Event & ev, double dt) //switch
+void Player::Update(sf::Event & ev, double dt)
 {
-	std::map<Keys, sf::Keyboard::Key> keys = Game::Get().get_keys();
+	std::map<Keys, sf::Keyboard::Key> keys = Game::Get().Get_keys();
 	float previous_y = y;
 	float previous_x = x;
 
 	if (ev.type == sf::Event::KeyPressed)
 	{
+
 		if (ev.key.code == keys[UP])
 		{
 			Move_Up(dt);
@@ -84,26 +85,24 @@ void Player::Update(sf::Event & ev, double dt) //switch
 		}
 		else if (ev.key.code == keys[SHOOT])
 		{
-			if (Game::Get().get_bullet_time() > 0.7)
+			if (Game::Get().Get_bullet_time() > 0.7)
 			{
 				Game::Get().Create_Bullet(this);
-				Game::Get().restart_bullet_clock();
+				Game::Get().Restart_bullet_clock();
 			}
 		}
 	}
 	sprite.setPosition(x, y);
 }
 
-
-
 void Player::Move_Up(const double & dt)
 {
 
 	dir = UP_;
-	this->set_Tile();
+	this->Set_tile();
 	float previous_y = y;
 	y -= velocity * dt;
-	sprite = Sprites::Get().get_sprite("Tanks", sf::IntRect(0, 0, size, size));
+	sprite = Sprites::Get().Get_sprite("Tanks", sf::IntRect(0, 0, size, size));
 	if (Game::Get().Check_if_entity_is_not_on_map(this))
 	{
 		y = previous_y;
@@ -121,10 +120,10 @@ void Player::Move_Up(const double & dt)
 void Player::Move_Down(const double & dt)
 {
 	dir = DOWN_;
-	this->set_Tile();
+	this->Set_tile();
 	float previous_y = y;
 	y += velocity * dt;
-	sprite = Sprites::Get().get_sprite("Tanks", sf::IntRect(0, 64, size, size));
+	sprite = Sprites::Get().Get_sprite("Tanks", sf::IntRect(0, 64, size, size));
 	if (Game::Get().Check_if_entity_is_not_on_map(this))
 	{
 		y = previous_y;
@@ -143,10 +142,10 @@ void Player::Move_Down(const double & dt)
 void Player::Move_Left(const double & dt)
 {
 	dir = LEFT_;
-	this->set_Tile();
+	this->Set_tile();
 	float previous_x = x;
 	x -= velocity * dt;
-	sprite = Sprites::Get().get_sprite("Tanks", sf::IntRect(0, 96, size, size));
+	sprite = Sprites::Get().Get_sprite("Tanks", sf::IntRect(0, 96, size, size));
 
 	if (Game::Get().Check_if_entity_is_not_on_map(this))
 	{
@@ -165,10 +164,10 @@ void Player::Move_Left(const double & dt)
 void Player::Move_Right(const double & dt)
 {
 	dir = RIGHT_;
-	this->set_Tile();
+	this->Set_tile();
 	float previous_x = x;
 	x += velocity * dt;
-	sprite = Sprites::Get().get_sprite("Tanks", sf::IntRect(0, 32, size, size));
+	sprite = Sprites::Get().Get_sprite("Tanks", sf::IntRect(0, 32, size, size));
 
 	if (Game::Get().Check_if_entity_is_not_on_map(this))
 	{
@@ -187,18 +186,15 @@ void Player::Move_Right(const double & dt)
 	
 }
 
-
-
-
-const int Player::get_player_size()
+const int Player::get_player_size() const
 {
 	return size;
 }
 
 bool Player::Check_collision_on_tiles(int Tile_x, int Tile_y)
 {
-	if (Game::Get().get_level()->get_block(Tile_x, Tile_y).get_block_type() != NONE && //jesli jest rozny od None lub Bush
-		Game::Get().get_level()->get_block(Tile_x, Tile_y).get_block_type() != BUSH)
+	if (Game::Get().Get_level()->Get_block(Tile_x, Tile_y).get_block_type() != NONE && //jesli jest rozny od None lub Bush
+		Game::Get().Get_level()->Get_block(Tile_x, Tile_y).get_block_type() != BUSH)
 	{
 		return true;
 	}

@@ -5,13 +5,9 @@
 #include <iostream>
 #include <chrono>
 
-Enemy::Enemy() :Object()
-{
-}
-
 Enemy::Enemy(double x, double y, double speed, Direction dir): Object(x, y, speed, dir)
 {
-	sprite = Sprites::Get().get_sprite("Tanks", sf::IntRect(64, 64, size, size));
+	sprite = Sprites::Get().Get_sprite("Tanks", sf::IntRect(64, 64, size, size));
 	tile_x = 0;
 	tile_x_2 = 0;
 	tile_y = 0;
@@ -19,12 +15,12 @@ Enemy::Enemy(double x, double y, double speed, Direction dir): Object(x, y, spee
 	sprite.setPosition(x, y);
 }
 
-int Enemy::get_size()
+int Enemy::Get_size()
 {
 	return size;
 }
 
-void Enemy::set_Tile()
+void Enemy::Set_tile()
 {
 	if (dir == UP_)
 	{
@@ -88,15 +84,14 @@ void Enemy::Update(sf::Event & ev, double dt)
 		y = previous_y;
 	}
 	sprite.setPosition(x, y);
-
 }
 
 void Enemy::Move_Up(const double & dt)
 {
-	set_Tile();
+	Set_tile();
 	float previous_y = y;
 	y -= velocity * dt;
-	sprite = Sprites::Get().get_sprite("Tanks", sf::IntRect(64, 0, size, size));
+	sprite = Sprites::Get().Get_sprite("Tanks", sf::IntRect(64, 0, size, size));
 	if (tile_y > 0) {
 		//sprawdzenie kolizji z bloczkami od gory
 		if (Check_collision_with_tiles(tile_x, tile_y) ||
@@ -105,17 +100,15 @@ void Enemy::Move_Up(const double & dt)
 			y = previous_y;
 		}
 	}
-
 }
 
 void Enemy::Move_Down(const double & dt)
 {
-	set_Tile();
+	Set_tile();
 	float previous_y = y;
 	y += velocity * dt;
-	sprite = Sprites::Get().get_sprite("Tanks", sf::IntRect(64, 64, size, size));
+	sprite = Sprites::Get().Get_sprite("Tanks", sf::IntRect(64, 64, size, size));
 	if (tile_y < 25) {
-
 
 		//sprawdzenie kolizji z bloczkami od dolu
 		if (Check_collision_with_tiles(tile_x, tile_y) ||
@@ -123,16 +116,15 @@ void Enemy::Move_Down(const double & dt)
 		{
 			y = previous_y;
 		}
-
 	}
 }
 
 void Enemy::Move_Left(const double & dt)
 {
-	set_Tile();
+	Set_tile();
 	float previous_x = x;
 	x -= velocity * dt;
-	sprite = Sprites::Get().get_sprite("Tanks", sf::IntRect(64, 96, size, size));
+	sprite = Sprites::Get().Get_sprite("Tanks", sf::IntRect(64, 96, size, size));
 	if (tile_x > 0) {
 		//sprawdzenie kolizji z bloczkami od lewej
 		if (Check_collision_with_tiles(tile_x, tile_y) ||
@@ -145,10 +137,10 @@ void Enemy::Move_Left(const double & dt)
 
 void Enemy::Move_Right(const double & dt)
 {
-	set_Tile();
+	Set_tile();
 	float previous_x = x;
 	x += velocity * dt;
-	sprite = Sprites::Get().get_sprite("Tanks", sf::IntRect(64, 32, size, size));
+	sprite = Sprites::Get().Get_sprite("Tanks", sf::IntRect(64, 32, size, size));
 	if (tile_x < 24) {
 		//sprawdzenie kolizji z bloczkami od prawej
 		if (Check_collision_with_tiles(tile_x, tile_y) ||
@@ -156,7 +148,6 @@ void Enemy::Move_Right(const double & dt)
 		{
 			x = previous_x;
 		}
-
 	}
 }
 
@@ -193,12 +184,9 @@ float Enemy::Choose_time(float x, float y)
 	std::default_random_engine engine;
 	std::uniform_real_distribution<float> distribution(x, y);
 	engine.seed(std::chrono::system_clock::now().time_since_epoch().count());
-	
+
 	return distribution(engine);
-
 }
-
-
 
 void Enemy::Choose_action()
 {
@@ -208,22 +196,18 @@ void Enemy::Choose_action()
 		driving_timer.restart();
 		Choose_direction();
 	}
-
 	float shooting_time = Choose_time(0.4, 0.7); //odstêp czasu miêdzy nastêpnymi kulami
 	if (shooting_timer.getElapsedTime().asSeconds() > shooting_time)
 	{
 		shooting_timer.restart();
 		Game::Get().Create_Bullet(this);
 	}
-
-
 }
-
 
 bool Enemy::Check_collision_with_tiles(int Tile_x, int Tile_y) const
 {
-	if (Game::Get().get_level()->get_block(Tile_x, Tile_y).get_block_type() != NONE && //jesli jest rozny od None lub Bush
-		Game::Get().get_level()->get_block(Tile_x, Tile_y).get_block_type() != BUSH)
+	if (Game::Get().Get_level()->Get_block(Tile_x, Tile_y).get_block_type() != NONE && //jesli jest rozny od None lub Bush
+		Game::Get().Get_level()->Get_block(Tile_x, Tile_y).get_block_type() != BUSH)
 	{
 		return true;
 	}

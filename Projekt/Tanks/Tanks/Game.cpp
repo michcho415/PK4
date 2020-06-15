@@ -13,10 +13,11 @@ Game::Game():game_state(MAIN_MENU), game_difficulty(EASY), entity_speed(0.2), en
 	window = new sf::RenderWindow(sf::VideoMode(640, 480), "Game");
 	menu = new Menu(window);
 	stage = new Level(window);
-	InitDefaultKeys();
-	stage->LoadLevelfromFile("Stage1.txt");
-	player = new Player(stage->get_Center_x()-64, stage->get_Center_y()+174, entity_speed, UP_); // wywalic st¹d inicjalizowac z
+	Init_default_keys();
+	stage->Load_level_from_file("Stage1.txt");
+	player = new Player(stage->Get_center_x()-64, stage->Get_center_y()+174, entity_speed, UP_); // wywalic st¹d inicjalizowac z
 	entities.push_back(std::move(player));
+	
 	
 
 }
@@ -106,7 +107,7 @@ void Game::Run()
 
 void Game::Draw(sf::RenderWindow * window)
 {
-
+	
 	if (game_state == MAIN_MENU || game_state == OPTIONS)
 	{
 		window->clear(sf::Color::Black);
@@ -134,14 +135,12 @@ void Game::Draw(sf::RenderWindow * window)
 	else if (game_state == OVER)
 	{
 		window->clear(sf::Color::Black);
-		
+		menu->Draw(window);
 	}
 	window->display();
 }
 
-/** Metoda inicjuje domyœlne klawisze do obs³ugi wejœcia w grze.
-*/
-void Game::InitDefaultKeys()
+void Game::Init_default_keys()
 {
 	keys[UP] = sf::Keyboard::Up;
 	keys[DOWN] = sf::Keyboard::Down;
@@ -152,9 +151,6 @@ void Game::InitDefaultKeys()
 	keys[ENTER] = sf::Keyboard::Enter;
 }
 
-/** Metoda tworzy now¹ kulê w grze na pozycji danej jednosti i zgodnie z jej kierunkiem
-@param wskaŸnik na obiekt, który tworzy kulê
-*/
 void Game::Create_Bullet(Object* ob)
 {
 	float entitity_bullet_speed;
@@ -169,27 +165,27 @@ void Game::Create_Bullet(Object* ob)
 		entitity_bullet_speed = bullet_speed;
 	}
 
-	int spawn_position_x = ob->getPosition().x;
-	int spawn_position_y = ob->getPosition().y;
-	if (ob->get_direction() == UP_)
+	int spawn_position_x = ob->Get_position().x;
+	int spawn_position_y = ob->Get_position().y;
+	if (ob->Get_direction() == UP_)
 	{
 		spawn_position_y -= (block_size + 1);
 	}
-	else if (ob->get_direction() == DOWN_)
+	else if (ob->Get_direction() == DOWN_)
 	{
 		spawn_position_y += (block_size + 1);
 	}
-	else if (ob->get_direction() == LEFT_)
+	else if (ob->Get_direction() == LEFT_)
 	{
 		spawn_position_x -= (block_size + 1);
 	}
-	else if (ob->get_direction() == RIGHT_)
+	else if (ob->Get_direction() == RIGHT_)
 	{
 		spawn_position_x += (block_size + 1);
 	}
 	
 
-	Object* bullet = new Bullet(spawn_position_x + block_size, spawn_position_y + block_size, entitity_bullet_speed, ob->get_direction(), is_players);
+	Object* bullet = new Bullet(spawn_position_x + block_size, spawn_position_y + block_size, entitity_bullet_speed, ob->Get_direction(), is_players);
 	bullets.push_back(bullet);
 }
 
@@ -217,10 +213,10 @@ void Game::Check_bullet_collisons(std::vector<Object*> & bullets)
 
 bool Game::Check_if_bullet_is_not_on_map(const Object * bullet) const
 {
-	if (bullet->getPosition().x < stage->get_Center_x() - 204 ||
-		bullet->getPosition().x > stage->get_Center_x() + 204 ||
-		bullet->getPosition().y < stage->get_Center_y() - 204 ||
-		bullet->getPosition().y > stage->get_Center_y() + 204	)
+	if (bullet->Get_position().x < stage->Get_center_x() - 204 ||
+		bullet->Get_position().x > stage->Get_center_x() + 204 ||
+		bullet->Get_position().y < stage->Get_center_y() - 204 ||
+		bullet->Get_position().y > stage->Get_center_y() + 204	)
 	{
 		return true;
 	}
@@ -229,10 +225,9 @@ bool Game::Check_if_bullet_is_not_on_map(const Object * bullet) const
 
 bool Game::Check_if_bullet_collides_with_block(Object * bullet)
 {
-	Block_type temp = stage->get_block(bullet->get_tile_x(), bullet->get_tile_y()).get_block_type();
+	Block_type temp = stage->Get_block(bullet->Get_tile_x(), bullet->Get_tile_y()).get_block_type();
 
-	if (temp == BUSH ||
-		temp == NONE) // nie niszczy i moze przeleciec
+	if (temp == NONE || temp == BUSH) // nie niszczy i moze przeleciec
 	{
 		return false;
 	}
@@ -242,7 +237,7 @@ bool Game::Check_if_bullet_collides_with_block(Object * bullet)
 	}
 	else if (temp == BRICK) //niszczy
 	{
-		stage->set_block(bullet->get_tile_x(), bullet->get_tile_y(), NONE);
+		stage->Set_block(bullet->Get_tile_x(), bullet->Get_tile_y(), NONE);
 		return true;
 	}
 	return false;
@@ -253,13 +248,13 @@ bool Game::Check_if_bullet_destroys_entity(Object * bullet)
 	for (auto it2 = entities.begin(); it2 < entities.end(); )
 	{
 		
-		if (bullet->getPosition().x > (*it2)->getPosition().x && 
-			bullet->getPosition().x < (*it2)->getPosition().x + 32 && // (*it2)->get_size()
-			bullet->getPosition().y > (*it2)->getPosition().y &&
-			bullet->getPosition().y < (*it2)->getPosition().y + 32) //sprawdz czy kula nachodzi za gracza
+		if (bullet->Get_position().x > (*it2)->Get_position().x && 
+			bullet->Get_position().x < (*it2)->Get_position().x + 32 && // (*it2)->Get_size()
+			bullet->Get_position().y > (*it2)->Get_position().y &&
+			bullet->Get_position().y < (*it2)->Get_position().y + 32) //sprawdz czy kula nachodzi za gracza
 		{
 			Object * ob = *it2;
-			if (typeid(*ob) != typeid(Player) ) //RTTI do sprawdzenia czy gracz umar³
+			if (typeid(*ob) != typeid(Player) ) //RTTI do sprawdzenia czy gracz umar³ jesli nie jest gracza
 			{
 				if (dynamic_cast<Bullet*>(bullet)->get_belongingness() == false) // jesli jest od przeciwnika
 				{
@@ -271,8 +266,8 @@ bool Game::Check_if_bullet_destroys_entity(Object * bullet)
 				--enemies_on_map;
 			}
 			else {
-				set_game_state(OVER);
-				//player = nullptr; // usun gracza
+				Set_game_state(OVER);
+				
 				
 			}
 			
@@ -289,14 +284,14 @@ bool Game::Check_if_bullet_destroys_entity(Object * bullet)
 	return false;
 }
 
-float Game::get_bullet_time()
+float Game::Get_bullet_time()
 {
 	float elapsed_time = bullet_clock.getElapsedTime().asSeconds();
 	return elapsed_time;
 
 }
 
-void Game::restart_bullet_clock()
+void Game::Restart_bullet_clock()
 {
 	bullet_clock.restart();
 }
@@ -325,7 +320,7 @@ void Game::Spawn_enemy()
 {
 	if (enemies_on_map < 3)
 	{
-		Object * enemy = new Enemy(stage->get_Center_x() - stage->get_size_x()/2 + 1, stage->get_Center_y() - stage->get_size_y()/2 + 1, entity_speed*ratio, DOWN_);
+		Object * enemy = new Enemy(stage->Get_center_x() - stage->Get_size_x()/2 + 1, stage->Get_center_y() - stage->Get_size_y()/2 + 1, entity_speed*ratio, DOWN_);
 		entities.push_back(enemy);
 		++enemies_on_map;
 		spawn_clock.restart();
@@ -336,22 +331,14 @@ void Game::Spawn_enemy()
 
 bool Game::Check_if_entity_is_not_on_map(Object * entity)
 {
-	if (entity->getPosition().y <= stage->get_Center_y() - 13 * block_size - 2  ||
-		entity->getPosition().y >= stage->get_Center_y() + 11 * block_size + 2 ||
-		entity->getPosition().x <= stage->get_Center_x() - 13 * block_size - 2 ||
-		entity->getPosition().x >= stage->get_Center_x() + 11 * block_size + 2)
+	if (entity->Get_position().y <= stage->Get_center_y() - 13 * block_size - 2  ||
+		entity->Get_position().y >= stage->Get_center_y() + 11 * block_size + 2 ||
+		entity->Get_position().x <= stage->Get_center_x() - 13 * block_size - 2 ||
+		entity->Get_position().x >= stage->Get_center_x() + 11 * block_size + 2)
 		
 	{
 		return true;
 	}
 	return false;
 }
-
-
-
-
-
-
-
-
 

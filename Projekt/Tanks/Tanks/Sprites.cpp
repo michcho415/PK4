@@ -1,7 +1,7 @@
 #include <map>
 #include "Sprites.h"
 
-sf::Sprite Sprites::get_sprite(const std::string & name, sf::IntRect x)
+sf::Sprite Sprites::Get_sprite(const std::string & name, sf::IntRect x)
 {
 	return 	sf::Sprite(textures[name], x);
 }

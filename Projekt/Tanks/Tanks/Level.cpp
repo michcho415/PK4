@@ -4,7 +4,7 @@
 #include "Sprites.h"
 #include <fstream>
 
-void Level::LoadLevelfromFile(const std::string & filename) // dodac switch
+void Level::Load_level_from_file(const std::string & filename)
 {
 	std::ifstream input(R"(Stages\)" + filename);
 	int block_type;
@@ -19,17 +19,23 @@ void Level::LoadLevelfromFile(const std::string & filename) // dodac switch
 				input >> block_type;
 				input.get();
 				Block block(background_x + (j * 16.0f) + 8, background_y + i * 16.0f + 8);
-				if (block_type == 0) {
-					block.setSprite(NONE);
-				}
-				else if (block_type == 1) {
-					block.setSprite(BRICK);
-				}
-				else if (block_type == 2){
-					block.setSprite(METAL);
-				}
-				else{
-					block.setSprite(BUSH);
+				switch (block_type)
+				{
+				case 0:
+					block.Set_sprite(NONE);
+					break;
+				case 1:
+					block.Set_sprite(BRICK);
+					break;
+				case 2:
+					block.Set_sprite(METAL);
+					break;
+				case 3:
+					block.Set_sprite(BUSH);
+					break;
+				default:
+					block.Set_sprite(NONE);
+					break;
 				}
 				data[i][j] = block;
 
@@ -66,7 +72,7 @@ void Level::Draw(sf::RenderWindow *& window)
 	}
 }
 
-float Level::get_Center_y()
+float Level::Get_center_y()
 {
 	return square.getPosition().y;
 }
@@ -76,27 +82,27 @@ void Level::Draw_background(sf::RenderWindow *& window)
 	window->draw(square);
 }
 
-const float Level::get_size_x() const
+const float Level::Get_size_x() const
 {
 	return square.getSize().x;
 }
 
-const float Level::get_size_y() const
+const float Level::Get_size_y() const
 {
 	return square.getSize().y;
 }
 
-Block Level::get_block(int x, int y)
+Block Level::Get_block(int x, int y)
 {
 	return data[y][x];
 }
 
-void Level::set_block(int x, int y, Block_type type)
+void Level::Set_block(int x, int y, Block_type type)
 {
-	data[y][x].setSprite(type);
+	data[y][x].Set_sprite(type);
 }
 
-float Level::get_Center_x()
+float Level::Get_center_x()
 {
 	return square.getPosition().x;
 }

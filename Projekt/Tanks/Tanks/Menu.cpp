@@ -1,16 +1,15 @@
 #include "Menu.h"
 #include "Game.h"
 #include "Sprites.h"
-#include <iostream>
+#include <sstream>
 
 
 
 void Menu::Init()
 {
-	select_sprite = Sprites::Get().get_sprite("Tanks", sf::IntRect(0, 30, 30, 30));
-	Title = Sprites::Get().get_sprite("Title", sf::IntRect(0, 0, 357, 151));
+	select_sprite = Sprites::Get().Get_sprite("Tanks", sf::IntRect(0, 30, 30, 30));
+	Title = Sprites::Get().Get_sprite("Title", sf::IntRect(0, 0, 357, 151));
 
-	//TO DO: wywaliæ to poni¿ej
 	if (!tex.loadFromFile("Resources/Player1.bmp", sf::IntRect(0, 30, 30, 30)))
 	{
 		throw "Nie uda³o siê odczytaæ pliku Player1.bmp!";
@@ -32,12 +31,7 @@ Menu::Menu(sf::RenderWindow *& window):selectedItem(0)
 	Title.setTexture(title);
 	CenterOrigin(Title);
 	CenterPosition_X(Title, window, 150);
-
-	//select_sprite.setTexture(tex);
 	CenterOrigin(select_sprite);
-
-
-
 
 	//MAIN MENU
 	menu[0].setString("PLAY");
@@ -59,9 +53,7 @@ Menu::Menu(sf::RenderWindow *& window):selectedItem(0)
 	KeysText[4].setString("RIGHT");
 	KeysText[5].setString("SPACE");
 	press_key.setString("PRESS KEY!");
-	press_key.setFont(font);
-	press_key.setCharacterSize(15);
-	CenterOrigin(press_key);
+	Init_text_box(press_key);
 	SetPositionfromCenter(press_key, window, 0, 120);
 	press_key.setFont(font);
 	press_key.setCharacterSize(15);
@@ -69,13 +61,8 @@ Menu::Menu(sf::RenderWindow *& window):selectedItem(0)
 	//mainmenu
 	for (int i = 0; i <= 8; ++i)
 	{
-		
-		menu[i].setFont(font);
-		menu[i].setCharacterSize(15);
-		KeysText[i].setFont(font);
-		KeysText[i].setCharacterSize(15);
-		CenterOrigin(menu[i]);
-		CenterOrigin(KeysText[i]);
+		Init_text_box(menu[i]);
+		Init_text_box(KeysText[i]);
 		CenterPosition_X(menu[i], window, window->getSize().x / 2.0f + 30*i);
 	}
 	//options
@@ -87,19 +74,33 @@ Menu::Menu(sf::RenderWindow *& window):selectedItem(0)
 	//UI
 	PointsText.setFont(font);
 	PointsText.setCharacterSize(10);
-	PointsText.setString("POINTS:");
+	PointsText.setString("POINTS");
+	Score.setFont(font);
+	Score.setCharacterSize(10);
+	GameOver.setString("GAME OVER");
+	Init_text_box(GameOver);
+	SetPositionfromCenter(GameOver, window, 0, 0);
+
 	CenterOrigin(PointsText);
-	SetPositionfromCenter(PointsText, window, 190, -200);
+	SetPositionfromCenter(PointsText, window, 232, -200); 
+	SetPositionfromCenter(Score, window, 232, -180);
 
 
 	
 
 }
 
+void Menu::Init_text_box(sf::Text & text_box)
+{
+	text_box.setFont(font);
+	text_box.setCharacterSize(15);
+	CenterOrigin(text_box);
+}
+
 void Menu::MoveUp()
 {
 	--selectedItem;
-	if (Game::Get().get_game_state() == MAIN_MENU)
+	if (Game::Get().Get_game_state() == MAIN_MENU)
 	{
 		if (selectedItem < 0)
 		{
@@ -117,7 +118,7 @@ void Menu::MoveUp()
 void Menu::MoveDown()
 {
 	++selectedItem;
-	if (Game::Get().get_game_state() == MAIN_MENU)
+	if (Game::Get().Get_game_state() == MAIN_MENU)
 	{
 		if (selectedItem > 2)
 		{
@@ -138,7 +139,7 @@ void Menu::CheckEvents(sf::Event ev, sf::RenderWindow *& window, std::map<Keys, 
 	
 	if (ev.type == sf::Event::KeyPressed)
 	{
-		if (Game::Get().get_game_state() == MAIN_MENU)
+		if (Game::Get().Get_game_state() == MAIN_MENU)
 		{
 			if (ev.key.code == keys[UP])
 			{
@@ -153,10 +154,10 @@ void Menu::CheckEvents(sf::Event ev, sf::RenderWindow *& window, std::map<Keys, 
 			switch (selectedItem)
 			{
 			case 0:
-				Game::Get().set_game_state(PLAYING);
+				Game::Get().Set_game_state(PLAYING);
 				break;
 			case 1:
-				Game::Get().set_game_state(OPTIONS);
+				Game::Get().Set_game_state(OPTIONS);
 				//option = OPTIONS;
 				selectedItem = 0;
 				break;
@@ -166,12 +167,12 @@ void Menu::CheckEvents(sf::Event ev, sf::RenderWindow *& window, std::map<Keys, 
 			}
 			}
 		}
-		else if (Game::Get().get_game_state() == OPTIONS)
+		else if (Game::Get().Get_game_state() == OPTIONS)
 		{
 			if (ev.key.code == keys[ESCAPE])
 			{
 				selectedItem = 0;
-				Game::Get().set_game_state(MAIN_MENU);
+				Game::Get().Set_game_state(MAIN_MENU);
 			}
 			else if (ev.key.code == keys[UP])
 			{
@@ -199,18 +200,18 @@ void Menu::BindKeysandChangeDifficulty(std::map<Keys, sf::Keyboard::Key>& keys, 
 	switch (selectedItem)
 	{
 	case 0:
-		if (Game::Get().get_difficulty() == EASY)
+		if (Game::Get().Get_difficulty() == EASY)
 		{
-			Game::Get().set_difficulty(MEDIUM);
+			Game::Get().Set_difficulty(MEDIUM);
 			KeysText[0].setString("MEDIUM");
 		}
-		else if (Game::Get().get_difficulty() == MEDIUM)
+		else if (Game::Get().Get_difficulty() == MEDIUM)
 		{
-			Game::Get().set_difficulty(HARD);
+			Game::Get().Set_difficulty(HARD);
 			KeysText[0].setString("HARD");
 		}
 		else {
-			Game::Get().set_difficulty(EASY);
+			Game::Get().Set_difficulty(EASY);
 			KeysText[0].setString("EASY");
 		}
 		
@@ -277,7 +278,7 @@ int Menu::set_Key(std::map<Keys, sf::Keyboard::Key>& keys, sf::RenderWindow *& w
 
 void Menu::Draw(sf::RenderWindow *& window)
 {
-	if (Game::Get().get_game_state() == MAIN_MENU)
+	if (Game::Get().Get_game_state() == MAIN_MENU)
 	{
 		window->draw(Title);
 		for (int i = 2; i >= 0; --i)
@@ -300,7 +301,7 @@ void Menu::Draw(sf::RenderWindow *& window)
 			break;
 		}
 	}
-	else if (Game::Get().get_game_state() == OPTIONS)
+	else if (Game::Get().Get_game_state() == OPTIONS)
 	{
 		for (int i = 8; i >= 3; --i)
 		{
@@ -339,9 +340,16 @@ void Menu::Draw(sf::RenderWindow *& window)
 
 		}
 	}
-	else if (Game::Get().get_game_state() == PLAYING)
+	else if (Game::Get().Get_game_state() == PLAYING)
 	{
+		Exchange_points_to_text();
 		window->draw(PointsText);
+		window->draw(Score);
+	}
+	else if (Game::Get().Get_game_state() == OVER)
+	{
+		window->draw(GameOver);
+		PointsText.setString("Your Score:");
 	}
 }
 
@@ -471,4 +479,12 @@ std::string Menu::Difficulty_to_string(Difficulty diff)
 	}
 	return word;
 
+}
+
+void Menu::Exchange_points_to_text()
+{
+	std::stringstream s;
+	s << Game::Get().Get_score();
+	Score.setString(s.str());
+	CenterOrigin(Score);
 }

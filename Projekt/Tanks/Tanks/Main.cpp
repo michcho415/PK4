@@ -9,7 +9,7 @@ int main()
 {
 	
 	try {
-		std::cout << ((6 + 1 + 1) % 5) + 1 << '\n';
+		std::cout << (611 % 5) + 1 << '\n';
 		Game::Get().Run();
 	}
 	catch (...)
