@@ -2,8 +2,6 @@
 #include "Level.h"
 #include "Block.h"
 #include "Enemy.h"
-
-#include <iostream>
 #include <typeinfo>
 
 Game::Game():game_state(MAIN_MENU), game_difficulty(EASY), entity_speed(0.2), enemies_on_map(0), score(0), block_size(16)
@@ -15,7 +13,7 @@ Game::Game():game_state(MAIN_MENU), game_difficulty(EASY), entity_speed(0.2), en
 	stage = new Level(window);
 	Init_default_keys();
 	stage->Load_level_from_file("Stage1.txt");
-	player = new Player(stage->Get_center_x()-64, stage->Get_center_y()+174, entity_speed, UP_); // wywalic st¹d inicjalizowac z
+	player = new Player(stage->Get_center_x()-64, stage->Get_center_y()+174, entity_speed, UP_); // wywalic stad inicjalizowac z
 	entities.push_back(std::move(player));
 	
 	
@@ -249,12 +247,12 @@ bool Game::Check_if_bullet_destroys_entity(Object * bullet)
 	{
 		
 		if (bullet->Get_position().x > (*it2)->Get_position().x && 
-			bullet->Get_position().x < (*it2)->Get_position().x + 32 && // (*it2)->Get_size()
+			bullet->Get_position().x < (*it2)->Get_position().x + 32 && 
 			bullet->Get_position().y > (*it2)->Get_position().y &&
 			bullet->Get_position().y < (*it2)->Get_position().y + 32) //sprawdz czy kula nachodzi za gracza
 		{
 			Object * ob = *it2;
-			if (typeid(*ob) != typeid(Player) ) //RTTI do sprawdzenia czy gracz umar³ jesli nie jest gracza
+			if (typeid(*ob) != typeid(Player) ) //RTTI do sprawdzenia czy gracz umarl jesli nie jest gracza
 			{
 				if (dynamic_cast<Bullet*>(bullet)->get_belongingness() == false) // jesli jest od przeciwnika
 				{

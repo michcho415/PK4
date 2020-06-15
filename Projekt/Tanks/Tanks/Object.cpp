@@ -1,6 +1,5 @@
 #include "Object.h"
 #include <fstream>
-#include <iostream>
 #include <cmath>
 
 Object::Object(): tile_x(0), tile_y(0), dir(UP_)

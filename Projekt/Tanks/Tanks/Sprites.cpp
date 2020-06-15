@@ -11,7 +11,7 @@ Sprites::Sprites()
 {
 	if (!textures["Tanks"].loadFromFile("Resources/tank.png"))
 	{
-		throw "sth"; // TO DO: rzuæ wyj¹tkiem: nieuda³o siê odczytac z pliku
+		throw "sth"; // TO DO: rzuc wyjatkiem: nieudalo sie odczytac z pliku
 	}
 	if (!textures["Blocks"].loadFromFile("Resources/block.png"))
 	{

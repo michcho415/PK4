@@ -2,7 +2,6 @@
 #include "Sprites.h"
 #include "Game.h"
 #include <random>
-#include <iostream>
 #include <chrono>
 
 Enemy::Enemy(double x, double y, double speed, Direction dir): Object(x, y, speed, dir)
@@ -26,7 +25,7 @@ void Enemy::Set_tile()
 	{
 		tile_x = (int)(x - 50) / 16; 
 		tile_y = (int)(y - 32) / 16; 
-		tile_x_2 = (int)(x - 25) / 16; //dobrac tak zeby sprawdza³o odpowiednie bloczki
+		tile_x_2 = (int)(x - 25) / 16; //dobrac tak zeby sprawdzalo odpowiednie bloczki
 		tile_y_2 = (int)(y - 32) / 16;
 	}
 	else if (dir == DOWN)
@@ -50,8 +49,7 @@ void Enemy::Set_tile()
 		tile_x_2 = (int)(x - 20) / 16;
 		tile_y_2 = (int)(y - 2) / 16;
 	}
-	//std::cout << "X: " << x << " " << "Y: " << y << '\n';
-	//std::cout << "tile_X: " << tile_x << " " << "tile_Y: " << tile_y << "\t\t tile_X2: " << tile_x_2 << " " << "tile_Y2: " << tile_y_2 << '\n';
+
 }
 
 void Enemy::Draw(sf::RenderWindow *& window)
@@ -196,7 +194,7 @@ void Enemy::Choose_action()
 		driving_timer.restart();
 		Choose_direction();
 	}
-	float shooting_time = Choose_time(0.4, 0.7); //odstêp czasu miêdzy nastêpnymi kulami
+	float shooting_time = Choose_time(0.4, 0.7); //odstep czasu miedzy nastepnymi kulami
 	if (shooting_timer.getElapsedTime().asSeconds() > shooting_time)
 	{
 		shooting_timer.restart();

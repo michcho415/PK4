@@ -3,19 +3,19 @@
 
 #include "Object.h"
 
-///Klasa reprezentuj¹ca gracza
+/**Klasa reprezentujaca gracza*/
 class Player: public Object
 {
 private:
-
-	const int size = 32; ///rozmiar jednostki gracza
+	/**rozmiar jednostki gracza*/
+	const int size = 32; 
 
 public:
 
-	/**Konstruktor wieloargumentowy inicjuj¹cy pozycjê, prêdkoœæ oraz kierunek gracza.
+	/**Konstruktor wieloargumentowy inicjujacy pozycje, predkosc oraz kierunek gracza.
 	@param x pozycja x gracza
 	@param y pozycja y gracza
-	@param speed prêdkoœæ gracza
+	@param speed predkosc gracza
 	@param dir zwrot gracza
 	*/
 	Player(double x, double y, double speed, Direction dir);
@@ -25,39 +25,39 @@ public:
 	*/
 	int Get_size();
 
-	/**Metoda ustawia na jakich bloczkach planszy znajdujê siê gracz na podstawie kierunku w którym siê porusza.
+	/**Metoda ustawia na jakich bloczkach planszy znajduje sie gracz na podstawie kierunku w ktorym sie porusza.
 	*/
 	void Set_tile();
 
 	/**Funkcja rysuje sprite'a gracza w oknie programu.
-	@param window wskaŸnik na obiekt okna
+	@param window wskaznik na obiekt okna
 	*/
 	void Draw(sf::RenderWindow *& window);
 
-	/**Metoda sprawdza wciœniête klawisze z klawiatury i wywo³uje odpowiednie akcjê dla gracza np. przemieszcza go lub tworzy kulê.
-	Ustawia równie¿ na jakim fragmencie planszy znajduje siê gracz.
-	@param ev obiekt przechowuj¹cy informacje o zdarzeniach
-	@param dt czas miêdzy klatkami (frametime)
+	/**Metoda sprawdza wcisniete klawisze z klawiatury i wywoluje odpowiednie akcje dla gracza np. przemieszcza go lub tworzy kule.
+	Ustawia rowniez na jakim fragmencie planszy znajduje sie gracz.
+	@param ev obiekt przechowujacy informacje o zdarzeniach
+	@param dt czas miedzy klatkami (frametime)
 	*/
 	void Update(sf::Event & ev, double dt);
 
-	/** Metoda przemieszcza gracza w górê, ustawia mu odpowiedni zwrot i skorelowany z nim sprite oraz sprawdza kolizjê z bloczkami u góry.
-	@param dt czas miêdzy klatkami (frametime)
+	/** Metoda przemieszcza gracza w gore, ustawia mu odpowiedni zwrot i skorelowany z nim sprite oraz sprawdza kolizje z bloczkami u gory.
+	@param dt czas miedzy klatkami (frametime)
 	*/
 	void Move_Up(const double & dt);
 
-	/** Metoda przemieszcza gracza w dó³, ustawia mu odpowiedni zwrot i skorelowany z nim sprite oraz sprawdza kolizjê z bloczkami na dole.
-	@param dt czas miêdzy klatkami (frametime)
+	/** Metoda przemieszcza gracza w dol, ustawia mu odpowiedni zwrot i skorelowany z nim sprite oraz sprawdza kolizje z bloczkami na dole.
+	@param dt czas miedzy klatkami (frametime)
 	*/
 	void Move_Down(const double & dt);
 
-	/** Metoda przemieszcza gracza w lewo, ustawia mu odpowiedni zwrot i skorelowany z nim sprite oraz sprawdza kolizjê z bloczkami po lewej stronie.
-	@param dt czas miêdzy klatkami (frametime)
+	/** Metoda przemieszcza gracza w lewo, ustawia mu odpowiedni zwrot i skorelowany z nim sprite oraz sprawdza kolizje z bloczkami po lewej stronie.
+	@param dt czas miedzy klatkami (frametime)
 	*/
 	void Move_Left(const double & dt);
 
-	/** Metoda przemieszcza gracza w prawo, ustawia mu odpowiedni zwrot i skorelowany z nim sprite oraz sprawdza kolizjê z bloczkami po prawej stronie.
-	@param dt czas miêdzy klatkami (frametime)
+	/** Metoda przemieszcza gracza w prawo, ustawia mu odpowiedni zwrot i skorelowany z nim sprite oraz sprawdza kolizje z bloczkami po prawej stronie.
+	@param dt czas miedzy klatkami (frametime)
 	*/
 	void Move_Right(const double & dt);
 
@@ -66,10 +66,10 @@ public:
 	*/
 	const int get_player_size() const;
 
-	/** Metoda sprawdza czy gracz nie koliduje z odpowiednimi typami bloczków
-	@param Tile_x pozycja bloczka w rzêdzie
+	/** Metoda sprawdza czy gracz nie koliduje z odpowiednimi typami bloczkow
+	@param Tile_x pozycja bloczka w rzedzie
 	@param Tile_y pozycja bloczka w kolumnie
-	@return w przypadku kiedy kolizja wyst¹pi³a zwraca true, w przeciwnym wypadku false
+	@return w przypadku kiedy kolizja wystapila zwraca true, w przeciwnym wypadku false
 	*/
 	bool Check_collision_on_tiles(int Tile_x, int Tile_y);
 	

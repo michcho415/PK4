@@ -12,15 +12,15 @@ void Menu::Init()
 
 	if (!tex.loadFromFile("Resources/Player1.bmp", sf::IntRect(0, 30, 30, 30)))
 	{
-		throw "Nie uda³o siê odczytaæ pliku Player1.bmp!";
+		throw "Nie udalo sie odczytac pliku Player1.bmp!";
 	}
 	if (!font.loadFromFile("Resources/NesFont.ttf"))
 	{
-		throw "Nie uda³o siê odczytaæ pliku NesFont.ttf!";
+		throw "Nie udalo sie odczytac pliku NesFont.ttf!";
 	}
 	if (!title.loadFromFile("Resources/Title.png"))
 	{
-		throw "Nie uda³o siê odczytaæ pliku Title.png!";
+		throw "Nie udalo sie odczytac pliku Title.png!";
 	}
 }
 

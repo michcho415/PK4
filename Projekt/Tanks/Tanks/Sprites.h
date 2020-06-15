@@ -2,16 +2,17 @@
 #define SPRITES_H
 #include <SFML/Graphics.hpp>
 
-///Klasa przechowuj¹ca tekstury (singleton)
+/**Klasa przechowujaca tekstury (singleton)*/
 class Sprites
 {
-	std::map<std::string, sf::Texture> textures; ///mapa tekstur
+	/**mapa tekstur*/
+	std::map<std::string, sf::Texture> textures; 
 
 public:
 
-	/** Metoda pozwala uzyskaæ odpowiedniego sprite'a z tekstury
-	@param name klucz pod którym jest tekstura
-	@param x który wycinek tekstury
+	/** Metoda pozwala uzyskac odpowiedniego sprite'a z tekstury
+	@param name klucz pod ktorym jest tekstura
+	@param x ktory wycinek tekstury
 	@return zwraca sprite'a
 	*/
 	sf::Sprite Get_sprite(const std::string & name, sf::IntRect x);

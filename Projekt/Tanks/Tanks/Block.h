@@ -3,20 +3,21 @@
 #include "Object.h"
 #include "SFML/Graphics.hpp"
 
-///typ wyliczeniowy do 
+/**typ wyliczeniowy do okreslenia typu bloczka*/
 enum Block_type {NONE, BRICK, METAL, BUSH};
 
-///Klasa reprezentuj¹ca bloczek na planszy
+/**Klasa reprezentujaca bloczek na planszy*/
 class Block: public Object
 {
 private:
-
-	int size; ///rozmiar bloczka
-	Block_type bl_type; ///typ bloczka
+	/**rozmiar bloczka*/
+	int size; 
+	/**typ bloczka*/
+	Block_type bl_type; 
 	
 public:
 	Block();
-	/**Konstruktor wieloargumentowy, ustawia pozycjê bloczka oraz domyœlnie ustawia prêdkoœc bloczka na 0 i kierunek w górê.
+	/**Konstruktor wieloargumentowy, ustawia pozycje bloczka oraz domyslnie ustawia predkosc bloczka na 0 i kierunek w gore.
 	@param x pozycja x bloczka
 	@param y pozycja y bloczka
 	*/
@@ -26,12 +27,12 @@ public:
 	*/
 	int Get_size();
 
-	/**Ustawia na jakim fragmencie planszy znajduje siê bloczek.
+	/**Ustawia na jakim fragmencie planszy znajduje sie bloczek.
 	*/
 	void Set_tile();
 
 	/**Metoda rysuje bloczek w oknie
-	@param wskaŸnik na obiekt okna
+	@param window wskaznik na obiekt okna
 	*/
 	void Draw(sf::RenderWindow *& window);
 
@@ -41,9 +42,8 @@ public:
 	void Set_sprite(Block_type type);
 
 	/** Funkcja przesuwa bloczek.
-	@param ev obiekt przechowuj¹cy informacje o zdarzeniach
-	@param dt czas miêdzy klatkami (frametime)
-	@TODO Wrazie potrzeby zaimplementowaæ
+	@param ev obiekt przechowujacy informacje o zdarzeniach
+	@param dt czas miedzy klatkami (frametime)
 	*/
 	void Update(sf::Event & ev, double dt);
 

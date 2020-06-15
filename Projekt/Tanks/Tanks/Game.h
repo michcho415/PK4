@@ -9,75 +9,92 @@
 #include "Player.h"
 #include "Bullet.h"
 
-///Klasa przechowuj¹ca wszystkie obiekty w grze i zarz¹dzaj¹ca nimi (singleton)
+/**Klasa przechowujaca wszystkie obiekty w grze i zarzadzajaca nimi (singleton)*/
 class Game
 {
 private:
-
-	std::map<Keys, sf::Keyboard::Key> keys; ///mapa klawiszy
-	Game_State game_state; ///stan gry
-	Difficulty game_difficulty; ///poziom trudnoœci
-	const unsigned int block_size; ///rozmiar bloczka w grze
-	float bullet_speed; ///prêdkoœæ kuli
-	double entity_speed; ///prêdkoœæ jednostki
-	float ratio; /// mno¿nik ustawiany w zale¿noœci od poziomu trudnoœci
-	int enemies_on_map; ///iloœæ przecwiników na mapie
-	sf::Clock bullet_clock; ///zegar ograniczaj¹cy czêstoœæ wystrza³u kuli dla gracza
-	sf::Clock spawn_clock; ///zegar okreœlaj¹cy czy mo¿e przeciwnik pojawiæ siê na planszy 
-	int score; ///aktualny wynik
-	sf::Text score_in_text; ///wynik w postaci tekstu
-	Menu* menu; ///wskaŸnik na Menu
-	sf::RenderWindow* window; ///wskaŸnik na obiekt okna
-	Level* stage; ///wskaŸnik na planszê
-	Object* player; ///wskaŸnik na gracza
-	std::vector<Object*> bullets; ///wektor przechowuj¹cy wszystkie aktualne kule w grze
-	std::vector<Object*> entities; ///wektor przechowuj¹cy wszystkie jednostki w grze
+	/**mapa klawiszy*/
+	std::map<Keys, sf::Keyboard::Key> keys; 
+	/**stan gry*/
+	Game_State game_state; 
+	/**poziom trudnosci*/
+	Difficulty game_difficulty; 
+	/**rozmiar bloczka w grze*/
+	const unsigned int block_size; 
+	/**predkosc kuli*/
+	float bullet_speed; 
+	/**predkosc jednostki*/
+	double entity_speed; 
+	/** mnoznik ustawiany w zaleznosci od poziomu trudnosci*/
+	float ratio; 
+	/**ilosc przecwinikow na mapie*/
+	int enemies_on_map; 
+	/**zegar ograniczajacy czestosc wystrzalu kuli dla gracza*/
+	sf::Clock bullet_clock; 
+	/**zegar okreslajacy czy moze przeciwnik pojawic sie na planszy*/
+	sf::Clock spawn_clock; 
+	/**aktualny wynik*/
+	int score; 
+	/**wynik w postaci tekstu*/
+	sf::Text score_in_text; 
+	/**wskaznik na Menu*/
+	Menu* menu; 
+	/**wskaznik na obiekt okna*/
+	sf::RenderWindow* window; 
+	/**wskaznik na plansze*/
+	Level* stage; 
+	/**wskaznik na gracza*/
+	Object* player; 
+	/**wektor przechowujacy wszystkie aktualne kule w grze*/
+	std::vector<Object*> bullets; 
+	/**wektor przechowujacy wszystkie jednostki w grze*/
+	std::vector<Object*> entities; 
 
 public:
 
-	/** Konstruktor domyœlny klasy. Inicjuje domyœlnymi wartoœciami podstawowe wartoœci: prêdkoœæ jednostek,
-	prêdkoœæ kul, rozmiar bloczka, stan gry, poziom trudnoœci oraz wynik i ile jest przeciwników na mapie.
-	Tworzy now¹ planszê i inicjuje gracza oraz klawisze, którymi siê porusza.
+	/** Konstruktor domyslny klasy. Inicjuje domyslnymi wartosciami podstawowe wartosci: predkosc jednostek,
+	predkosc kul, rozmiar bloczka, stan gry, poziom trudnosci oraz wynik i ile jest przeciwnikow na mapie.
+	Tworzy nowa plansze i inicjuje gracza oraz klawisze, ktorymi sie porusza.
 	*/
 	Game();
 
-	/** Destruktor klasy Game. Usuwa wszystkie obiekty zaalokowane dynamiczne tj. kule, jednostki, planszê itp.
+	/** Destruktor klasy Game. Usuwa wszystkie obiekty zaalokowane dynamiczne tj. kule, jednostki, plansze itp.
 	*/
 	~Game();
 	Game(const Game & o) = delete;
 
-	/** Metoda zwraca instancjê obiektu gry.
+	/** Metoda zwraca instancje obiektu gry.
 	@return obiekt gry.
 	*/
 	static Game & Get() { static Game Game; return Game; }
 
 	/** Metoda do ustawiania stanu gry.
-	@param state na jaki stan ma zostaæ zmieniona aktualnie gra
+	@param state na jaki stan ma zostac zmieniona aktualnie gra
 	*/
 	void Set_game_state(Game_State state) { game_state = state; }
 
-	/** Metoda zwraca aktualny stan gry np. czy jesteœmy w Menu czy toczy siê rozgrywka.
+	/** Metoda zwraca aktualny stan gry np. czy jestesmy w Menu czy toczy sie rozgrywka.
 	@return zwraca stan gry
 	*/
 	Game_State Get_game_state() { return game_state; }
 
-	/** Metoda ustawia poziom trudnoœci w zale¿noœci od parametru.
-	@param diff poziom trudnoœci jaki ma zostaæ ustawiony
+	/** Metoda ustawia poziom trudnosci w zaleznosci od parametru.
+	@param diff poziom trudnosci jaki ma zostac ustawiony
 	*/
 	void Set_difficulty(Difficulty diff) { game_difficulty = diff; }
 
-	/** Metoda zwraca aktualnie ustawiony poziom trudnoœci w grze.
-	@return poziom trudnoœci
+	/** Metoda zwraca aktualnie ustawiony poziom trudnosci w grze.
+	@return poziom trudnosci
 	*/
 	Difficulty Get_difficulty() { return game_difficulty;}
 
-	/** Metoda zwraca mapê z klawiszami, których u¿ytkownik u¿ywa do poruszania siê.
+	/** Metoda zwraca mape z klawiszami, ktorych uzytkownik uzywa do poruszania sie.
 	@return mapa z kodami klawiszy
 	*/
 	std::map<Keys, sf::Keyboard::Key>& Get_keys() { return keys; }
 
 	/** Metoda zwraca aktualny wybrany poziom w grze.
-	@return zwraca wskaŸnik na poziom gry.
+	@return zwraca wskaznik na poziom gry.
 	*/
 	Level* Get_level() { return stage; }
 
@@ -86,52 +103,52 @@ public:
 	*/
 	int Get_score() { return score; }
 	
-	/** Metoda tworzy now¹ kulê w grze na pozycji danej jednostki i zgodnie z jej kierunkiem oraz przydziela jej przynale¿noœæ w zale¿noœci
-	czy wystrzeli³ j¹ przeciwnik czy gracz.
-	@param wskaŸnik na obiekt, który tworzy kulê
+	/** Metoda tworzy nowa kule w grze na pozycji danej jednostki i zgodnie z jej kierunkiem oraz przydziela jej przynaleznosc w zaleznosci
+	czy wystrzelil ja przeciwnik czy gracz.
+	@param ob wskaznik na obiekt, ktory tworzy kule
 	*/
 	void Create_Bullet(Object* ob);
 
-	/** Metoda "uruchamia" grê. Odpowiada ona za rysowania wszystkich obiektów na ekran w zale¿noœci od stanu gry, obliczanie czasu miêdzy klatkami
-	oraz sprawdzaniu wydarzeñ i aktualizowaniu pozycji wszystkich obiektów na planszy.
+	/** Metoda "uruchamia" gre. Odpowiada ona za rysowania wszystkich obiektow na ekran w zaleznosci od stanu gry, obliczanie czasu miedzy klatkami
+	oraz sprawdzaniu wydarzen i aktualizowaniu pozycji wszystkich obiektow na planszy.
 	*/
 	void Run();
 
-	/** Metoda odpowiada za rysowanie obiektów w grze na ekran w zale¿noœci od stanu gry. Odœwie¿a ona ekran oraz rysuje i wyœwietla
+	/** Metoda odpowiada za rysowanie obiektow w grze na ekran w zaleznosci od stanu gry. Odswieza ona ekran oraz rysuje i wyswietla
 	elementy gry na ekranie.
-	@param window wskaŸnik na obiekt okna
+	@param window wskaznik na obiekt okna
 	*/
 	void Draw(sf::RenderWindow * window);
 
-	/** Metoda inicjuje domyœlne klawisze do obs³ugi wejœcia w grze.
+	/** Metoda inicjuje domyslne klawisze do obslugi wejscia w grze.
 	*/
 	void Init_default_keys();
 
-	/** Metoda dla ka¿dej kuli w grze sprawdza czy nast¹pi³a kolizja z krañcem mapy, z innym graczem lub z bloczkiem na planszy.
-	W przypadku, gdy nast¹pi kolizja kuli z jednostk¹ na mapie to w zale¿noœci od przynale¿noœci kuli niszczy kulê i przeciwnika lub
-	niszczy kulê i gracza. Sprawdza równie¿ kolizjê z bloczkami.
-	@param bullets wektor kul znajduj¹cych siê w grze.
+	/** Metoda dla kazdej kuli w grze sprawdza czy nastapila kolizja z krancem mapy, z innym graczem lub z bloczkiem na planszy.
+	W przypadku, gdy nastapi kolizja kuli z jednostka na mapie to w zaleznosci od przynaleznosci kuli niszczy kule i przeciwnika lub
+	niszczy kule i gracza. Sprawdza rowniez kolizje z bloczkami.
+	@param bullets wektor kul znajdujacych sie w grze.
 	*/
 	void Check_bullet_collisons(std::vector<Object*> & bullets);
 
-	/** Metoda sprawdza czy kula nie znajduje siê na mapie.
-	@return zwraca true jeœli kula jest poza map¹, w przeciwnym wypadku false
+	/** Metoda sprawdza czy kula nie znajduje sie na mapie.
+	@return zwraca true jesli kula jest poza mapa, w przeciwnym wypadku false
 	*/
 	bool Check_if_bullet_is_not_on_map(const Object * bullet)const;
 
-	/** Sprawdza kolizjê kuli z bloczkiem na którym znajduje siê aktualnie kula oraz w zale¿noœci od typu bloczka ustawia mu teksturê.
-	@return w przypadku kiedy kula nie niszczy bloczka i mo¿e przez niego przelecieæ zwraca false,
+	/** Sprawdza kolizje kuli z bloczkiem na ktorym znajduje sie aktualnie kula oraz w zaleznosci od typu bloczka ustawia mu teksture.
+	@return w przypadku kiedy kula nie niszczy bloczka i moze przez niego przeleciec zwraca false,
 	*/
 	bool Check_if_bullet_collides_with_block(Object * bullet);
 
-	/** Metoda sprawdza czy kula niszczy jednostkê na mapie np. gracza lub przeciwnika. Je¿eli kula nachodzi na gracza to sprawdza czyja jest kula
-	i na jak¹ jednostkê nachodzi (gracza czy przeciwnika).Jeœli kula nale¿y do przeciwnika i nachodzi na przeciwnika tonie niszczy go. Jeœli kula
-	jest gracza i nachodzi na przeciwnika to niszczy go. Jeœli natomiast kula jest przeciwnika i nachodzi na gracza to nastêpuje koniec gry i gracz jest niszczony.
-	@return zwraca true jeœli nastapi³a kolizja kuli z jak¹kolwiek jednostkom, a false jeœli nie nast¹pi³a kolizja kuli z jednostk¹
+	/** Metoda sprawdza czy kula niszczy jednostke na mapie np. gracza lub przeciwnika. Jezeli kula nachodzi na gracza to sprawdza czyja jest kula
+	i na jaka jednostke nachodzi (gracza czy przeciwnika).Jesli kula nalezy do przeciwnika i nachodzi na przeciwnika to nie niszczy go. Jesli kula
+	jest gracza i nachodzi na przeciwnika to niszczy go. Jesli natomiast kula jest przeciwnika i nachodzi na gracza to nastepuje koniec gry i gracz jest niszczony.
+	@return zwraca true jesli nastapila kolizja kuli z jakakolwiek jednostkom, a false jesli nie nastapila kolizja kuli z jednostka
 	*/
 	bool Check_if_bullet_destroys_entity(Object* bullet);
 
-	/** Metoda zwraca jak d³ugo porusza siê ostatnia wystrzelona kula przez gracza.
+	/** Metoda zwraca jak dlugo porusza sie ostatnia wystrzelona kula przez gracza.
 	@return czas od ostatniej stworzonej kuli przez gracza.
 	*/
 	float Get_bullet_time();
@@ -140,16 +157,16 @@ public:
 	*/
 	void Restart_bullet_clock();
 
-	/** Metoda inicjuje szybkoœæ poruszania siê kul oraz mno¿nik w zale¿noœci od wybranego poziomu trudnoœci.
+	/** Metoda inicjuje szybkosc poruszania sie kul oraz mnoznik w zaleznosci od wybranego poziomu trudnosci.
 	*/
 	void Init_if_game_diff_selected();
 
-	/** Tworzy gracza na planszy, jeœli ich jest mniej ni¿ 3 i w okreœlonych odstêpach czasu.
+	/** Tworzy gracza na planszy, jesli ich jest mniej niz 3 i w okreslonych odstepach czasu.
 	*/
 	void Spawn_enemy();
 
 	/** Spradza czy jednostka nie jest na mapie.
-	@return zwraca true jeœli jednostka jest poza map¹, w przeciwnym wypadku zwraca false.
+	@return zwraca true jesli jednostka jest poza mapa, w przeciwnym wypadku zwraca false.
 	*/
 	bool Check_if_entity_is_not_on_map(Object* entity);
 	

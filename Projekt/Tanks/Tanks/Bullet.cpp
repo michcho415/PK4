@@ -1,7 +1,6 @@
 #include "Bullet.h"
 #include "Sprites.h"
 #include "OriginandPositionTemplate.h"
-#include <iostream>
 
 
 Bullet::Bullet(double x, double y, double speed, Direction dir, bool whose):Object(x, y, speed, dir), is_players(whose)
